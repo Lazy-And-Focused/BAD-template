@@ -17,7 +17,7 @@ Backend After Drinking (Бэкенд после пьянки)
     ├── tsconfig.build.json
     ├── tsconfig.json
     ├── test/
-    │   ├── app.e2e-spec.ts
+    │   ├── app.e2e-test.ts
     │   └── jest-e2e.json
     └── src/
         ├── app.module.ts
@@ -42,29 +42,23 @@ Backend After Drinking (Бэкенд после пьянки)
         │   ├── $MIDDLEWARE_NAME.middleware.ts
         │   └── logger.middleware.ts
         │── routes/
-        │   ├── deployer.ts
-        │   ├── index.ts
         │   ├── auth/
         │   │   ├── auth.controller.ts
         │   │   ├── auth.module.ts
         │   │   └── auth.routes.ts
-        │   └── $ROUTE/
+        │   └── $ROUTE/                                 # routes/:route/
         │       ├── dto/
-        │       │   └── $DTO_NAME.dto.ts
-        │       ├── $ROUTE.controller.spec.ts
+        │       │   └── $DTO_NAME-$ROUTE.dto.ts
+        │       ├── entities/                           # !
+        │       │   └── $ROUTE.entity.ts
+        │       ├── $ROUTE.controller.test.ts
         │       ├── $ROUTE.controller.ts
+        │       ├── $ROUTE.service.test.ts
         │       ├── $ROUTE.service.ts
         │       ├── $ROUTE.module.ts
-        │       ├── $ROUTE.routes.ts
-        │       └── $SUB_ROUTE/
-        │           ├── dto/
-        │           │   └── $DTO_NAME.dto.ts
-        │           ├── $SUB_ROUTE.controller.spec.ts
-        │           ├── $SUB_ROUTE.controller.ts
-        │           ├── $SUB_ROUTE.service.ts
-        │           ├── $SUB_ROUTE.module.ts
-        │           └── $SUB_ROUTE.routes.ts
-        ├── services/
+        │       ├── $ROUTE.routes.ts                    # .routes
+        │       └── $SUB_ROUTE/...                      # /:route/:subroute
+        ├── services/                                   # services
         │   ├── auth.service.ts
         │   ├── env.service.ts
         │   ├── hash.service.ts
@@ -79,9 +73,16 @@ Backend After Drinking (Бэкенд после пьянки)
             └── index.ts
 ```
 
+- ! - Не обязательный файл/папка
+
+- `routes/:route/` — Не генирировать в ручную: `nest g resource $ROUTE/$ROUTE`, и не забыть про `$ROUTE.routes.ts`.
+- `.routes` — Обязательный файл для расписывания URL запросов и их методов.
+- `/:route/:subroute` — Копия `$ROUTE`, максимум до 3-4 вложеностей.
+- `services` — Можно заменить на `api/`, также можно создать `index.ts`.
+
 Роуты могут иметь максимум 3-4 вложенности.
 
-### $ROUTE.routes.ts
+### `$ROUTE.routes.ts`
 
 Файл в котором будут основные пути для контроллера. Следует следовать следующему паттерну:
 
@@ -89,7 +90,7 @@ Backend After Drinking (Бэкенд после пьянки)
 /* 
     ROUTE — Константа, которая будет хранить путь до контроллера.
 */
-const ROUTE: string | string[] = "/" //
+const ROUTE: string | string[] = "/";
 
 /*
     ROUTES — Объект, который будет хранить пути по определенным методам, например:
@@ -107,7 +108,7 @@ const ROUTES: Record<string, string> = {
 };
 ```
 
-### $ROUTE.service.ts
+### `$ROUTE.service.ts`
 
 Основной файл, в котором будет хранится логика конкретного роутера. Для удобства можно использовать API других сервисов, создав `/api` и перенеся часть логики туда. Например:
 
@@ -125,7 +126,7 @@ export class Service {
 export default Service;
 ```
 
-### $ROUTE.controller.ts
+### `$ROUTE.controller.ts`
 
 Файл, который будет кэшировать запросы с `./$ROUTE.service`, валидировать запросы пользователя и др.
 
@@ -167,9 +168,29 @@ export class ProjectController {
 export default ProjectController;
 ```
 
-### $ROUTE.module.ts
+### `$ROUTE.module.ts`
 
 Это модуль, который будет экспортироваться в общих роутер
+
+### `nest-cli.json`
+
+```json
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "./src",
+  "language": "ts",
+  "root": "./",
+  "generateOptions": {
+    "baseDir": "routes",
+    "flat": true,
+    "spec": true
+  },
+  "compilerOptions": {
+    "deleteOutDir": true
+  }
+}
+```
 
 ## Code style
 

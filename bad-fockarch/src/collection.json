@@ -1,0 +1,11 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "bad-fockarch": {
+      "description": "BAD Architecture route generator",
+      "factory": "./bad-fockarch/bad-fockarch.factory#main",
+      "schema": "./bad-fockarch/schema.json",
+      "aliases": ["bad"]
+    }
+  }
+}

@@ -20,7 +20,7 @@ import { getPassportEnv } from "@services/env.service";
 
 const defaultPassports: Record<AuthTypes, { path: string; scopes: string[] }> = {
   google: {
-    path: "some path to library",
+    path: "passport-google-oauth20",
     scopes: []
   }
 };

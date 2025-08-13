@@ -1,0 +1,39 @@
+{
+  "name": "bad-fockarch",
+  "version": "0.1.1",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && jasmine src/**/*_spec.js"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "files": [
+    "./**/*.js",
+    "./**/*.js.map",
+    "./**/*.d.ts",
+    "./**/files/**/*.ts",
+    ".gitignore",
+    "*.json",
+    "./README.md",
+    "./tsconfig.json"
+  ],
+  "author": {
+    "name": "FOCKUSTY",
+    "email": "viserd.yt@gmail.com",
+    "url": "https://fockusty.netlify.app/"
+  },
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^20.1.6",
+    "@angular-devkit/schematics": "^20.1.6",
+    "typescript": "~5.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.19",
+    "@types/jasmine": "~5.1.0",
+    "jasmine": "^5.0.0"
+  }
+}
