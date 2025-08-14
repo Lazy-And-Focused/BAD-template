@@ -1,8 +1,8 @@
 import type { <%= classify(name) %>CreateDto } from "./dto/<%= name %>-create.dto";
 import type { <%= classify(name) %>UpdateDto } from "./dto/<%= name %>-update.dto";
 
-import { Public } from "@decorators/public.decorator";
-import { AuthGuard } from "@guards/auth/auth.guard";
+import { Public } from "decorators/public.decorator";
+import { AuthGuard } from "guards/auth/auth.guard";
 
 import {
   Controller as NestController,
@@ -25,7 +25,7 @@ import { Service } from "./<%= name %>.service.ts"
 @Injectable()
 @NestController(ROUTE)
 @UseGuards(AuthGuard)
-export class Contoller {
+export class Controller {
   public constructor(
     private readonly service: Service
   ) {}

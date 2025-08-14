@@ -1,5 +1,5 @@
-import type { <%= classify(name) %> } from "@types/<%= name %>.types";
-import type { ServiceResponse } from "@types/promise/response.types";
+import type { <%= classify(name) %> } from "types/<%= name %>.types";
+import type { ServiceResponse } from "types/promise/response.types";
 
 import type { <%= classify(name) %>CreateDto } from "./dto/<%= name %>-create.dto";
 import type { <%= classify(name) %>UpdateDto } from "./dto/<%= name %>-update.dto";
