@@ -21,16 +21,13 @@ jobs:
           node-version: "20.x"
           registry-url: https://registry.npmjs.org
 
-      - name: "moving to bad-fockarch"
-        run: cd bad-fockarch
-
       - name: "Installing dependencies"
-        run: npm install
+        run: cd bad-fockarch && npm install
 
       - name: "Building package"
-        run: npm run build
+        run: cd bad-fockarch && npm run build
 
       - name: "Publishing"
-        run: npm publish --access public --tag latest
+        run: cd bad-fockarch && npm publish --access public --tag latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
