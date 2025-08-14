@@ -48,9 +48,7 @@ Backend After Drinking (Бэкенд после пьянки)
         │   │   └── auth.routes.ts
         │   └── $ROUTE/                                 # routes/:route/
         │       ├── dto/
-        │       │   └── $DTO_NAME-$ROUTE.dto.ts
-        │       ├── entities/                           # !
-        │       │   └── $ROUTE.entity.ts
+        │       │   └── ROUTE-$DTO_NAME.dto.ts
         │       ├── $ROUTE.controller.test.ts
         │       ├── $ROUTE.controller.ts
         │       ├── $ROUTE.service.test.ts
@@ -68,17 +66,20 @@ Backend After Drinking (Бэкенд после пьянки)
         │   ├── general.stategy.ts
         │   └── index.ts
         └── types/
+            ├── promise/...                             # ? types/promise/
             ├── $TYPE_NAME.types.ts
+            ├── response.types.ts
             ├── auth.types.ts
             └── index.ts
 ```
 
-- ! - Не обязательный файл/папка
+- ? - Не обязательный файл/папка
 
 - `routes/:route/` — Не генерировать в ручную, использовать: `nest g bad $ROUTE`.
 - `.routes` — Обязательный файл для расписывания URL запросов и их методов.
 - `/:route/:subroute` — Копия `$ROUTE`, максимум до 3-4 вложеностей.
 - `services` — Можно заменить на `api/`, также можно создать `index.ts`.
+- `types/promise/` — Копия `types/`, только все типу обёрнуты в `Promise`
 
 Роуты могут иметь максимум 3-4 вложенности.
 
@@ -110,13 +111,46 @@ const ROUTES: Record<string, string> = {
 
 ### `$ROUTE.service.ts`
 
-Основной файл, в котором будет хранится логика конкретного роутера. Для удобства можно использовать API других сервисов, создав `/api` и перенеся часть логики туда. Например:
+Основной файл, в котором будет хранится логика конкретного роутера. Для удобства можно использовать API других сервисов, создав `/api` и перенеся часть из логики сервива туда. Например:
+
+- Это:
+
+```ts
+import env from "@env";
+
+export class Service {
+    public async get(token: string, profileId: string) {
+        try {
+            const data = await (await fetch(env.GOOGLE_API_URL + "/people/" + profileId, {
+                method: "GET",
+                headers: { Authorization: token }
+            })).json();
+
+            return {
+                successed: true,
+                data,
+                error: null
+            }
+        } catch (error) {
+            console.error(error);
+            
+            return {
+                succssed: false,
+                data: null,
+                error: (error instanceof Error) ? error.message : "some error"
+            };
+        }
+    }
+}
+```
+
+- Превратится в это:
 
 ```ts
 import GoogleApi from "api/google";
 
 export class Service {
-    public get(profileId: string, token: string) {
+    public get(token: string, profileId: string) {
         return new GoogleApi(token).get(profileId);
     }
 
@@ -128,44 +162,131 @@ export default Service;
 
 ### `$ROUTE.controller.ts`
 
-Файл, который будет кэшировать запросы с `./$ROUTE.service`, валидировать запросы пользователя и др.
+Файл, который будет валидировать запросы пользователя и др. Вот пример сгенерированного файла:
 
 ```ts
-import type { NextFunction, Request, Response } from "express";
+import type { UsersCreateDto } from "./dto/users-create.dto";
+import type { UsersUpdateDto } from "./dto/users-update.dto";
 
-import { Controller, Get, Inject, Injectable, Next, Req, Res } from "@nestjs/common";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
+import { Public } from "decorators/public.decorator";
+import { AuthGuard } from "guards/auth/auth.guard";
 
-import { Cache } from "cache-manager";
+import {
+  Controller as NestController,
+  Injectable,
+  Get,
+  Param,
+  Post,
+  Body,
+  Put,
+  Patch,
+  Delete,
+  UseGuards,
+  HttpStatus
+} from "@nestjs/common";
+import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
-import { Service } from "./${routeName}.service";
+import { ROUTE, ROUTES } from "./users.routes";
+import { Service } from "./users.service.ts"
 
 @Injectable()
-@Controller(ROUTE)
+@NestController(ROUTE)
 @UseGuards(AuthGuard)
-export class ProjectController {
-    public constructor(
-        private readonly service: Service,
-        @Inject(CACHE_MANAGER) private cacheManager: Cache
-    ) {}
+export class Controller {
+  public constructor(
+    private readonly service: Service
+  ) {}
 
-    @ApiOperation({ summary: "some summary", description: "some description" })
-    @ApiResponse({
-        status: HttpStatus.OK,
-        description: "some description"
-    })
-    @Get(ROUTES.GET)
-    public async get(
-        @Req() req: Request, // Если не используется, можно не указывать
-        @Res() res: Response, // Если не используется, можно не указывать
-    ): { /* ... */ } {
-        // ...some code...
+  @ApiOperation({
+    summary: "Getting an array of users"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Getted"
+  })
+  @Get(ROUTES.GET)
+  @Public()
+  public get() {
+    return this.service.get()
+  }
 
-        return { /* ... */ };
-    }
+  @ApiOperation({
+    summary: "Getting a users by id"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Getted"
+  })
+  @Get(ROUTES.GET_ONE)
+  @Public()
+  public getOne(
+    @Param("id") id: string
+  ) {
+    return this.service.getOne(id);
+  }
+
+  @ApiOperation({
+    summary: "Creaing a users"
+  })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: "Created"
+  })
+  @Post(ROUTES.POST)
+  public post(
+    @Body() data: UsersCreateDto 
+  ) {
+    return this.service.post(data);
+  }
+
+  @ApiOperation({
+    summary: "Updating a users"
+  })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Updated"
+  })
+  @Put(ROUTES.PUT)
+  public put(
+    @Param("id") id: string,
+    @Body() data: UsersUpdateDto 
+  ) {
+    return this.service.put(id, data);
+  }
+
+  @ApiOperation({
+    summary: "Updating a users"
+  })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Updated"
+  })
+  @Patch(ROUTES.PUT)
+  public patch(
+    @Param("id") id: string,
+    @Body() data: UsersUpdateDto 
+  ) {
+    return this.service.patch(id, data);
+  }
+  
+  @ApiOperation({
+    summary: "Deleting a users"
+  })
+  @ApiUnauthorizedResponse({ description: "Unauthorized" })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Deleted"
+  })
+  @Delete(ROUTES.DELETE)
+  public delete(
+    @Param("id") id: string
+  ) {
+    return this.service.delete(id);
+  }
 }
-
-export default ProjectController;
 ```
 
 ### `$ROUTE.module.ts`
@@ -177,14 +298,17 @@ export default ProjectController;
 ```json
 {
   "$schema": "https://json.schemastore.org/nest-cli",
-  "collection": "@nestjs/schematics",
+  "collection": "bad-fockarch",
   "sourceRoot": "./src",
   "language": "ts",
   "root": "./",
   "generateOptions": {
     "baseDir": "routes",
-    "flat": true,
-    "spec": true
+    "spec": {
+      "controller": true,
+      "service": true,
+      "module": false
+    }
   },
   "compilerOptions": {
     "deleteOutDir": true
