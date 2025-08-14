@@ -1,2 +1,2 @@
 export * from "./auth.types";
-export * from "./response.type";
+export * from "./response.types";
