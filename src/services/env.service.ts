@@ -1,4 +1,4 @@
-import { AUTH_TYPES, AuthTypes } from "@types";
+import { AUTH_TYPES, AuthTypes } from "types";
 import { config } from "dotenv";
 config();
 

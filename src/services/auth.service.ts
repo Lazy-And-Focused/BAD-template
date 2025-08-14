@@ -1,5 +1,5 @@
 import { Next, Req, Res } from "@nestjs/common";
-import { Auth, AUTH_TYPES, AuthTypes } from "@types";
+import { Auth, AUTH_TYPES, AuthTypes } from "types";
 import type { NextFunction, Request, Response } from "express";
 
 import passport = require("passport");

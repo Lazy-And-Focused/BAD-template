@@ -2,7 +2,7 @@ import passport = require("passport");
 
 import Authenticator from "./authenticator";
 
-import { Auth } from "@types";
+import { Auth } from "types";
 
 class GeneralStrategy {
   protected readonly _passport: passport.PassportStatic = passport;

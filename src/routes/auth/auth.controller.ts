@@ -3,9 +3,9 @@ import type { NextFunction, Request, Response } from "express";
 
 import { ROUTE, ROUTES } from "./auth.routes";
 
-import env from "@services/env.service";
-import Hash from "@services/hash.service";
-import AuthApi from "@services/auth.service";
+import env from "services/env.service";
+import Hash from "services/hash.service";
+import AuthApi from "services/auth.service";
 
 @Injectable()
 @Controller(ROUTE)

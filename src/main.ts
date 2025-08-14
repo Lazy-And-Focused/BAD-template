@@ -8,7 +8,7 @@ import cookieParser = require("cookie-parser");
 import Session from "./app/session.app";
 import Passport from "./strategies";
 import { AppModule } from "./app.module";
-import { env } from '@services/env.service';;
+import { env } from "services/env.service";;
 
 const passport = new Passport();
 

@@ -3,8 +3,8 @@ import { Profile } from "passport";
 
 import { Strategy, VerifyCallback, VerifyFunction } from "passport-oauth2";
 
-import { AuthTypes } from "@types";
-import { getPassportEnv } from "@services/env.service";
+import { AuthTypes } from "types";
+import { getPassportEnv } from "services/env.service";
 
 /* const CreateOrUpdate = async <T>({
   model,
