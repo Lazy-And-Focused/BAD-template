@@ -24,6 +24,8 @@
     "paths": {
        "@env": ["./src/services/env.service"],
        "@services/*": ["./src/services/*"],
+       "@decorators/*": ["./src/decorators/*"],
+       "@guards/*": ["./src/guards/*"],
        "@types": ["./src/types"],
        "@types/*": ["./src/types/*"]
     }
