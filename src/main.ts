@@ -6,7 +6,8 @@ import { json, urlencoded } from "express";
 import cookieParser = require("cookie-parser");
 
 import Session from "./app/session.app";
-import Passport from "./strategies";
+import Passport from "./app/strategies";
+
 import { AppModule } from "./app.module";
 import { env } from "services/env.service";;
 

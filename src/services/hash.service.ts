@@ -28,6 +28,13 @@ class Hash {
     return this._hmac.digest("hex");
   }
 
+  public static generateCode(data: string = (Math.random() * 1000).toString()) {
+    return crypto
+      .createHmac("sha512", env.HASH_KEY)
+      .update((new Date().getTime().toString() + data))
+      .digest("base64");
+  }
+
   public static resolveToken(token: string): ParseReturnType {
     const [ method, hash ] = token.split(" ");
 

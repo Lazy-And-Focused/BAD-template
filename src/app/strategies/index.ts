@@ -4,7 +4,7 @@ import Authenticator from "./authenticator";
 
 import { Auth } from "types";
 
-class GeneralStrategy {
+export class Strategy {
   protected readonly _passport: passport.PassportStatic = passport;
   private readonly _authenticator: Authenticator;
 
@@ -59,4 +59,4 @@ class GeneralStrategy {
   }
 }
 
-export default GeneralStrategy;
+export default Strategy;

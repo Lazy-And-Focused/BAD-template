@@ -20,30 +20,28 @@ class AuthApi {
     };
   }
 
-  private getMethod(): [boolean, { [key: string]: unknown; method: string; body: unknown }] {
+  private getMethod(): { successed: boolean, method: string; body: unknown } {
     if ((AUTH_TYPES as unknown as string[]).includes(this._method)) {
-      return [true, { body: null, method: this._method }];
+      return { successed: true, body: null, method: this._method };
     }
 
     const abbreviation = abbreviations.get(this._method); 
     if (abbreviation) {
-      return [true, { body: null, method: abbreviation }];
+      return { successed: true, body: null, method: abbreviation };
     };
 
-    return [
-      false,
-      {
-        body: {
-          msg: "Sorry, but method " + this._method + " not found. Try next:",
-          methods: AUTH_TYPES
-        },
-        method: this._method
+    return {
+      successed: false,
+      body: {
+        msg: "Sorry, but method " + this._method + " not found. Try next:",
+        methods: AUTH_TYPES
+      },
+      method: this._method
       }
-    ];
   }
 
   public auth(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction): unknown {
-    const [successed, { method, body }] = this.getMethod();
+    const { successed, method, body } = this.getMethod();
 
     if (!successed) {
       return res.send(body)
@@ -58,7 +56,7 @@ class AuthApi {
     @Next() next: NextFunction,
     callback: (...args: [unknown, Auth | null, unknown]) => unknown
   ): unknown {
-    const [successed, { method, body }] = this.getMethod();
+    const { successed, method, body } = this.getMethod();
 
     if (!successed) {
       return res.send(body)
