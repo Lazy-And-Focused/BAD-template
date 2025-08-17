@@ -18,7 +18,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
+          zip -r release.zip . -x "*.git*" "*.github*" "node_modules/*"
+
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${tag#v}" \
               --generate-notes
+              ./**/*.zip
