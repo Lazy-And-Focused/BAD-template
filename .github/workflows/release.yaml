@@ -6,24 +6,32 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build:
+  create-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      packages: write
+      contents: write  # Необходимо для создания релиза
+      packages: write  # Может потребоваться для загрузки assets
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: Create tar archive
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          tar -czf ./release.tar.gz ./src/**
+    - name: Setup GitHub CLI
+      run: |
+        gh --version || sudo apt-get install -y gh
+        gh auth status || echo "${GITHUB_TOKEN}" | gh auth login --with-token
 
-          gh release create "$tag" \
-            --repo="$GITHUB_REPOSITORY" \
-            --title="${tag#v}" \
-            --generate-notes
-            ./release.tar.gz
+    - name: Create tar archive
+      run: |
+        mkdir -p release_contents
+        cp -r src/* release_contents/
+        tar -czf release.tar.gz -C release_contents .
+
+    - name: Create Release
+      run: |
+        gh release create "${{ github.ref_name}}" \
+          --repo="$GITHUB_REPOSITORY" \
+          --title="${GITHUB_REF_NAME#v}" \
+          --generate-notes \
+          release.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
