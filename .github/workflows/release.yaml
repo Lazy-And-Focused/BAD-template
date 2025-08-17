@@ -18,7 +18,18 @@ jobs:
     - name: Create tar archive
       run: |
         mkdir -p release_contents
-        cp -r src/* release_contents/
+        cp -r src/* release_contents/src
+        cp -r test/* release_contents/test
+        cp -r ./.env.example release_contents/.env.example
+        cp -r ./.gitignore release_contents/.gitignore
+        cp -r ./.prettierrc release_contents/.prettierrc
+        cp -r ./eslint.config.mjs release_contents/eslint.config.mjs
+        cp -r ./LICENSE release_contents/LICENSE
+        cp -r ./nest-cli.json release_contents/nest-cli.json
+        cp -r ./package.json release_contents/package.json
+        cp -r ./README.md release_contents/README.md
+        cp -r ./tsconfig.json release_contents/tsconfig.json
+        cp -r ./tsconfig.build.json release_contents/tsconfig.build.json
         tar -czf release.tar.gz -C release_contents .
 
     - name: Create Release
