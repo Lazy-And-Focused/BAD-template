@@ -14,7 +14,7 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release_contents
-          cp -r src/ README.md LICENSE
+          cp -r src/
 
       - name: Create tar archive
         run: |
