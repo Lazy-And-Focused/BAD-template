@@ -1,7 +1,0 @@
-dist/* export-ignore
-node_modules/* export-ignore
-docs/* export-ignore
-bad-fockarch/* export-ignore
-pnpm-lock.yaml export-ignore
-package-lock.json export-ignore
-LICENSE export-ignore
