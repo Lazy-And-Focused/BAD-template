@@ -1,29 +1,35 @@
-name: Create release
+name: Create Release
 
 on:
   push:
     tags:
-      - "v*"
-
-permissions:
-  contents: write
+      - 'v*.*.*'
 
 jobs:
-  release:
-    name: Release pushed tag
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-      - name: Create release
+
+      - name: Build project (если нужно)
+        run: npm install && npm run build
+
+      - name: Prepare release files
+        run: |
+          mkdir -p release_contents
+          cp -r dist/ README.md LICENSE release_contents/
+
+      - name: Create tar archive
+        run: |
+          tar -czf "$GITHUB_WORKSPACE/release.tar.gz" -C release_contents .
+          ls -lh "$GITHUB_WORKSPACE/release.tar.gz"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release.tar.gz
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          tar -cf ./release.tar ./src/**
-
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
-              ./release.tar
