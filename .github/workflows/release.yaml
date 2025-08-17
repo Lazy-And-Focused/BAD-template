@@ -13,7 +13,7 @@ jobs:
 
       - name: Create tar archive
         run: |
-          tar -czf "$GITHUB_WORKSPACE/release.tar.gz" "./src/**" .
+          tar -czf "$GITHUB_WORKSPACE/release.tar.gz" "$GITHUB_WORKSPACE/../src/**" .
           ls -lh "$GITHUB_WORKSPACE/release.tar.gz"
 
           gh release create "$tag" \
