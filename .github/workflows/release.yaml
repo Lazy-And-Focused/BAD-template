@@ -20,10 +20,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
-          tar -cf release.tar ./src/**
+          tar -cf ./release.tar ./src/**
 
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${tag#v}" \
               --generate-notes
-              ./**/*.tar
+              ./release.tar
