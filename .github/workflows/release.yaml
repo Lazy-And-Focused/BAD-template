@@ -1,41 +1,19 @@
-name: Create release
+name: Releases
 
-on:
+on: 
   push:
-    paths-ignore:
-      - '**/README.md'
-      - '**/bad-fockarch/**'
-      - '**/dist/**'
-      - '**/node_modules/**'
-      - '**/docs/**'
-      - '**/pnpm-lock.yaml'
-      - '**/package-lock.json'
-      - '**/LICENSE'
     tags:
-      - "v*"
-
-permissions:
-  contents: write
+    - '*'
 
 jobs:
-  release:
-    name: Release pushed tag
-    runs-on: ubuntu-22.04
+
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          rm **/README.md
-          rm **/bad-fockarch/**
-          rm **/dist/**
-          rm **/node_modules/**
-          rm **/docs/**
-          rm **/pnpm-lock.yaml
-          rm **/package-lock.json
-          rm **/LICENSE
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
+    - uses: actions/checkout@v4
+    - uses: ncipollo/release-action@v1
+      with:
+        artifacts: "release.tar.gz,foo/*.txt"
+        bodyFile: "body.md"
