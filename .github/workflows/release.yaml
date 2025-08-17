@@ -12,6 +12,9 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Create tar archive
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref_name }}
         run: |
           tar -czf ./release.tar.gz ./src/** .
           ls -lh "./release.tar.gz"
