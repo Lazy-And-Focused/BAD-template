@@ -32,10 +32,10 @@
   "dependencies": {
     "@angular-devkit/core": "^20.1.6",
     "@angular-devkit/schematics": "^20.1.6",
-    "typescript": "~5.8.2",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
+    "typescript": "~5.8.2",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^20.17.19",
     "@types/yargs": "^17.0.33",
