@@ -3,41 +3,27 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*' # Запускается при пуше тегов вида v1.0, v2.3.4 и т.д.
+      - 'v*.*.*'  # Более строгий формат тега (semver)
 
 jobs:
-  build:
+  create-release:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Node.js (если нужно)
-      uses: actions/setup-node@v3
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
-        node-version: '18'
-    
-    - name: Install dependencies (если нужно)
-      run: npm install
-      
-    - name: Build project (если нужно)
-      run: npm run build
-      
-    - name: Create release assets
+        fetch-depth: 0  # Для получения всей истории тегов
+
+    - name: Create zip archive
       run: |
-        mkdir release
-        
-        cp package.json release/
-        cp README.md release/
-        
-        rsync -av --exclude='node_modules' --exclude='.git' --exclude='.github' ./ release/
-        
+        zip -r release.zip . -x \
+          "*.git*" \
+          "*.github*" \
+          "node_modules/*" \
+          "bad-fockarch/*"
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: |
-          release/*
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        files: release.zip
