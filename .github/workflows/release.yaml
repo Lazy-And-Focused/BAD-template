@@ -16,4 +16,14 @@ jobs:
     - uses: ncipollo/release-action@v1
       with:
         artifacts: "release.tar.gz,foo/*.txt"
-        bodyFile: "body.md"
+        bodyFile: |
+          ./src/**
+          ./test/**
+          ./tsconfig.json
+          ./tsconfig.build.json
+          ./package.json
+          ./nest-cli.json
+          ./eslint.config.mjs
+          ./.prettierrc
+          ./.gitignore
+          ./.env.example
