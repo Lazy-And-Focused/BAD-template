@@ -2,6 +2,15 @@ name: Create release
 
 on:
   push:
+    paths-ignore:
+      - 'README.md'
+      - 'bad-fockarch/**'
+      - 'dist/**'
+      - 'node_modules/**'
+      - 'docs/**'
+      - 'pnpm-lock.yaml'
+      - 'package-lock.json'
+      - 'LICENSE'
     tags:
       - "v*"
 
