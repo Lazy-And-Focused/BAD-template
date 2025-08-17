@@ -3,18 +3,13 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'  # Более строгий формат тега (semver)
+      - 'v*.*.*'
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Для получения всей истории тегов
-
     - name: Create zip archive
       run: |
         zip -r release.zip . -x \
