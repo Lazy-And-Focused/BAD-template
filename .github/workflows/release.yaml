@@ -27,6 +27,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
+          rm **/README.md
+          rm **/bad-fockarch/**
+          rm **/dist/**
+          rm **/node_modules/**
+          rm **/docs/**
+          rm **/pnpm-lock.yaml
+          rm **/package-lock.json
+          rm **/LICENSE
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${tag#v}" \
