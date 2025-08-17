@@ -18,6 +18,8 @@ jobs:
     - name: Create tar archive
       run: |
         mkdir -p release_contents
+        mkdir -p release_contents/src
+        mkdir -p release_contents/test
         cp -r src/* release_contents/src
         cp -r test/* release_contents/test
         cp -r ./.env.example release_contents/.env.example
