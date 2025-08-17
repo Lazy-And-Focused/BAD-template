@@ -3,9 +3,8 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import { downloadFile } from "./download-file";
 import { extractFile } from "./extract-file";
-// import { exec } from "child_process";
+import { exec } from "child_process";
 
-// import { exec } from "child_process";
 const RELEASE_URL = "https://api.github.com/repos/Lazy-And-Focused/BAD-template/releases/latest";
 const getDownloadUrl = (version: string) => "https://github.com/Lazy-And-Focused/BAD-template/releases/download/" + version + "/release.tar.gz";
 
@@ -35,25 +34,28 @@ yargs()
     console.log("Название: " + argv.name);
     console.log("Путь: " + argv.path);
     console.log("Пакетный менеджер: " + argv.packageManager);
+    const path = `${argv.path}${argv.name}/release.tar.gz`;
 
     const data = await (await fetch(RELEASE_URL, {
       method: "GET"
     })).json();
 
-    downloadFile((await fetch(getDownloadUrl(data.tag_name))).url, argv.path + "" + argv.name + "/release.tar.gz");
+    await downloadFile((await fetch(getDownloadUrl(data.tag_name))).url, path);
     
     setTimeout(() => {
-      extractFile(argv.path + "" + argv.name + "/release.tar.gz");
-    }, 500);
-
-    // exec('npm i', function (error, stdout, stderr) {
-    //   console.log('stdout: ' + stdout);
-    //   console.log('stderr: ' + stderr);
-    //   if (error !== null) {
-    //     console.log('exec error: ' + error);
-    //   }
-    // });
-
+      extractFile(path);
+    
+      setTimeout(() => {
+        console.log("Packages downloading...");
+        exec(`cd ${argv.path}${argv.name} && npm i`, function (error, stdout, stderr) {
+          console.log('stdout:\n' + stdout);
+          console.log('stderr:\n' + stderr);
+          if (error !== null) {
+            console.log('exec error:\n' + error);
+          }
+        });
+      }, 1000);
+    }, 1000);
   })
   .help()
   .parse(hideBin(process.argv));
