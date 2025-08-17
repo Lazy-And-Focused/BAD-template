@@ -11,14 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare release files
-        run: |
-          mkdir -p release_contents
-          cp -r src/
-
       - name: Create tar archive
         run: |
-          tar -czf "$GITHUB_WORKSPACE/release.tar.gz" -C release_contents .
+          tar -czf "$GITHUB_WORKSPACE/release.tar.gz" "$GITHUB_WORKSPACE/src/**" .
           ls -lh "$GITHUB_WORKSPACE/release.tar.gz"
 
           gh release create "$tag" \
