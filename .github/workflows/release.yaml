@@ -10,12 +10,34 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Create Release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js (если нужно)
+      uses: actions/setup-node@v3
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        node-version: '18'
+    
+    - name: Install dependencies (если нужно)
+      run: npm install
+      
+    - name: Build project (если нужно)
+      run: npm run build
+      
+    - name: Create release assets
+      run: |
+        mkdir release
+        
+        cp package.json release/
+        cp README.md release/
+        
+        rsync -av --exclude='node_modules' --exclude='.git' --exclude='.github' ./ release/
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          release/*
         draft: false
         prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
