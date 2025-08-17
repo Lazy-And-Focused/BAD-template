@@ -1,29 +1,21 @@
-name: Releases
+name: Create Release
 
-on: 
+on:
   push:
     tags:
-    - '*'
+      - 'v*' # Запускается при пуше тегов вида v1.0, v2.3.4 и т.д.
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    
     steps:
-    - uses: actions/checkout@v4
-    - uses: ncipollo/release-action@v1
+    - name: Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        artifacts: "release.tar.gz,foo/*.txt"
-        bodyFile: |
-          **/src/**
-          **/test/**
-          **/tsconfig.json
-          **/tsconfig.build.json
-          **/package.json
-          **/nest-cli.json
-          **/eslint.config.mjs
-          **/.prettierrc
-          **/.gitignore
-          **/.env.example
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
