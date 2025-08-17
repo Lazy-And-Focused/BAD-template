@@ -16,8 +16,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
         run: |
-          tar -czf ./release.tar.gz ./src/** .
-          ls -lh "./release.tar.gz"
+          tar -czf ./release.tar.gz ./src/**
 
           gh release create "$tag" \
             --repo="$GITHUB_REPOSITORY" \
