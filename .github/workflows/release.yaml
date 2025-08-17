@@ -3,14 +3,14 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - 'v*'
 
 jobs:
   create-release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Необходимо для создания релиза
-      packages: write  # Может потребоваться для загрузки assets
+      contents: write
+      packages: write
 
     steps:
     - uses: actions/checkout@v4
