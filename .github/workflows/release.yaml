@@ -11,9 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build project (если нужно)
-        run: npm install && npm run build
-
       - name: Prepare release files
         run: |
           mkdir -p release_contents
@@ -24,12 +21,8 @@ jobs:
           tar -czf "$GITHUB_WORKSPACE/release.tar.gz" -C release_contents .
           ls -lh "$GITHUB_WORKSPACE/release.tar.gz"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            release.tar.gz
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh release create "$tag" \
+            --repo="$GITHUB_REPOSITORY" \
+            --title="${tag#v}" \
+            --generate-notes
+            ./release.tar.gz
