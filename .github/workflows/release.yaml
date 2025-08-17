@@ -15,11 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Setup GitHub CLI
-      run: |
-        gh --version || sudo apt-get install -y gh
-        gh auth status || echo "${GITHUB_TOKEN}" | gh auth login --with-token
-
     - name: Create tar archive
       run: |
         mkdir -p release_contents
