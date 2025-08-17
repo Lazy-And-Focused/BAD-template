@@ -17,13 +17,13 @@ jobs:
       with:
         artifacts: "release.tar.gz,foo/*.txt"
         bodyFile: |
-          ./src/**
-          ./test/**
-          ./tsconfig.json
-          ./tsconfig.build.json
-          ./package.json
-          ./nest-cli.json
-          ./eslint.config.mjs
-          ./.prettierrc
-          ./.gitignore
-          ./.env.example
+          **/src/**
+          **/test/**
+          **/tsconfig.json
+          **/tsconfig.build.json
+          **/package.json
+          **/nest-cli.json
+          **/eslint.config.mjs
+          **/.prettierrc
+          **/.gitignore
+          **/.env.example
