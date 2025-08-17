@@ -1,41 +1,25 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
-    "esModuleInterop": true,
-    "isolatedModules": true,
+    "baseUrl": "tsconfig",
+    "lib": ["es2018", "dom"],
     "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2024",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "rootDir": "src/",
+    "skipDefaultLibCheck": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
     "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "paths": {
-       "@env": ["./src/services/env.service"],
-       "services/*": ["./src/services/*"],
-       "decorators/*": ["./src/decorators/*"],
-       "guards/*": ["./src/guards/*"],
-       "types": ["./src/types"],
-       "types/*": ["./src/types/*"]
-    }
+    "target": "es6",
+    "types": ["jasmine", "node"]
   },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "bad-fockarch"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["src/*/files/**/*"]
 }
