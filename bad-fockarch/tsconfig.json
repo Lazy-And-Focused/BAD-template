@@ -1,25 +1,41 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
-    "lib": ["es2018", "dom"],
-    "declaration": true,
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitThis": true,
-    "noUnusedParameters": true,
-    "noUnusedLocals": true,
-    "rootDir": "src/",
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "resolvePackageJsonExports": true,
     "esModuleInterop": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2024",
     "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
     "strictNullChecks": true,
-    "target": "es6",
-    "types": ["jasmine", "node"]
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+       "@env": ["./src/services/env.service"],
+       "services/*": ["./src/services/*"],
+       "decorators/*": ["./src/decorators/*"],
+       "guards/*": ["./src/guards/*"],
+       "types": ["./src/types"],
+       "types/*": ["./src/types/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/*/files/**/*"]
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "bad-fockarch"
+  ]
 }
