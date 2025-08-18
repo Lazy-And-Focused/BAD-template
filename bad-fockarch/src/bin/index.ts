@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { downloadFile } from "./download-file";
-import { extractFile } from "./extract-file";
+import { downloadFile } from "./utils/download-file";
+import { extractFile } from "./utils/extract-file";
 import { exec } from "child_process";
 
 const RELEASE_URL = "https://api.github.com/repos/Lazy-And-Focused/BAD-template/releases/latest";
