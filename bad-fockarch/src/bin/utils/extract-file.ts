@@ -1,38 +1,38 @@
-import tar from "tar-stream"
-import fs from "fs"
-import zlib from "zlib"
+import tar from "tar-stream";
+import zlib from "zlib";
+
+import { createReadStream, existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
 import { join, parse } from "path"
 
 export const extractFile = (path: string) => {
   const extract = tar.extract();
 
-  extract.on('entry', function(header, stream, cb) {
-    if (header.type === "directory") {
-      if (!fs.existsSync(join(parse(path).dir, header.name))) {
-        fs.mkdirSync(join(parse(path).dir, header.name));
-      };
+  extract.on("entry", (header, stream, callback) => {
+    const dirPath = parse(path).dir;
+    const filePath = join(dirPath, header.name);
+    
+    const isHeaderFolderAndExists = header.type === "directory" && existsSync(filePath); 
+    if (isHeaderFolderAndExists) {
+      mkdirSync(filePath);
     } else {
-      fs.writeFileSync(join(parse(path).dir, header.name), "");
-    }
-
-    let file = ""
-    stream.on('data', function(chunk) {
-      file += chunk
-      fs.writeFileSync(join(parse(path).dir, header.name), file);
+      writeFileSync(filePath, "", "utf-8");
+    };
+    
+    let file = "";
+    stream.on("data", (chunk) => {
+      file += chunk;
+      writeFileSync(filePath, file);
     });
 
-    stream.on('end', function() {
-      cb();
-    });
-
+    stream.on('end', callback);
     stream.resume();
   });
-  
-  extract.on('finish', function() {
-    fs.rmSync(path, {force: true, recursive: true});
+
+  extract.on("finish", () => {
+    rmSync(path, { force: true, recursive: true });
   });
-  
-  fs.createReadStream(path)
+
+  createReadStream(path)
     .pipe(zlib.createGunzip())
     .pipe(extract);
 }
