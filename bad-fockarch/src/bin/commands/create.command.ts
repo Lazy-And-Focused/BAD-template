@@ -1,0 +1,100 @@
+import { ArgumentsCamelCase, PositionalOptions } from "yargs";
+
+import { exec } from "child_process";
+
+import Command from "./command.type";
+
+import { getDownloadUrl, RELEASE_FILE_NAME, RELEASE_URL } from "../utils/constants";
+import { downloadFile } from "../utils/download-file";
+import { extractFile } from "../utils/extract-file";
+
+type Props = {
+  name: string,
+  path: string,
+  "package-manager": "npm"|"pnpm",
+};
+
+export class CreateCommand extends Command<Props> {
+  public readonly command = "create [name] [path] [package-manager]";
+  public readonly description = "create your backend app with BAD";
+  public readonly argv: Record<keyof Props, PositionalOptions> = {
+    name: {
+      type: "string",
+      default: "bad-app",
+      describe: "name of your app folder"
+    },
+
+    path: {
+      type: "string",
+      default: "./",
+      describe: "path to your folder"
+    },
+
+    "package-manager": {
+      type: "string",
+      default: "npm",
+      describe: "Your package manager (npm/pnpm)",
+      alias: "pm",
+      choices: [
+        "npm",
+        "pnpm"
+      ]
+    }
+  };
+  
+  public async execute(argv: ArgumentsCamelCase<Props>): Promise<void> {
+    console.log("Название: " + argv.name);
+    console.log("Путь: " + argv.path);
+    console.log("Пакетный менеджер: " + argv.packageManager);
+
+    const folderPath = `${argv.path}${argv.name}`;
+    const filePath = `${folderPath}/${RELEASE_FILE_NAME}`;
+
+    const url = await this.fetchRelease();
+    
+    await this.downloadRelease(url, filePath);
+    await this.extractFile(filePath);
+    await this.downloadPackages(folderPath, argv.packageManager);
+
+    return;
+  }
+
+  private async downloadPackages(path: string, packageManager: "npm"|"pnpm") {
+    console.log("Packages downloading...");
+
+    exec(`cd ${path} && ${packageManager} --save install`, function (error, stdout, stderr) {
+      console.log('stdout:\n' + stdout);
+      console.log('stderr:\n' + stderr);
+      
+      if (error !== null) {
+        console.log('exec error:\n' + error);
+      }
+    });
+  }
+
+  private async extractFile(path: string) {
+    return new Promise((res) => {
+      extractFile(path);
+      
+      setTimeout(() => res(true), 1000);
+    });
+  }
+
+  private async downloadRelease(url: string, path: string) {
+    return new Promise((res) => {
+      downloadFile(url, path).then(() =>
+        setTimeout(() =>
+          res(true), 1000));
+    });
+  }
+
+  private async fetchRelease() {
+    const data = await (await fetch(RELEASE_URL, {
+      method: "GET"
+    })).json();
+
+    return (await fetch(getDownloadUrl(data.tag_name))).url;    
+  }
+}
+
+export default CreateCommand;

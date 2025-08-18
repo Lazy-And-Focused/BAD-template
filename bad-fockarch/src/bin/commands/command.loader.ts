@@ -12,10 +12,11 @@ export class Loader {
   }
 
   private readFile(file: string) {
-    const command = require(join(__dirname, file));
+    const data = require(join(__dirname, file));
+    const command = new data.default();
     
-    if (command.default instanceof Command) {
-      return command.default as Command<{[key: string]: unknown}>;
+    if (command instanceof Command) {
+      return command as Command<{[key: string]: unknown}>;
     } else {
       throw new Error(`Command ${file} is not a command`);
     }

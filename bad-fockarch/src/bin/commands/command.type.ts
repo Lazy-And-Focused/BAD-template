@@ -1,4 +1,4 @@
-import yargs, { PositionalOptions, ArgumentsCamelCase } from "yargs";
+import { PositionalOptions, ArgumentsCamelCase } from "yargs";
 
 export interface ICommand<T extends {[key: string]: unknown}> {
   command: string|string[],
@@ -7,12 +7,13 @@ export interface ICommand<T extends {[key: string]: unknown}> {
 
 export abstract class Command<T extends {[key: string]: unknown}> implements ICommand<T> {
   public abstract readonly command: string|string[];
+  public abstract readonly description: string;
   public abstract readonly argv: Record<keyof T, PositionalOptions>;
 
-  public abstract execute(argv: ArgumentsCamelCase<T>): unknown;
+  public abstract execute(argv: ArgumentsCamelCase<T>): void | Promise<void>;
   
-  public register(yargs: yargs.Argv<object>) {
-    return Object.keys(this.argv).map(key => yargs.positional(key, this.argv[key]));
+  public register() {
+    return Object.keys(this.argv).map(key => [key, this.argv[key]] as const);
   }
 }
 
