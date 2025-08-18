@@ -1,7 +1,14 @@
 import tar from "tar-stream";
 import zlib from "zlib";
 
-import { createReadStream, existsSync, mkdirSync, rmSync, writeFileSync } from "fs";
+import {
+  createReadStream,
+  existsSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync
+} from "fs";
+
 import { join, parse } from "path"
 
 export const extractFile = (path: string) => {
