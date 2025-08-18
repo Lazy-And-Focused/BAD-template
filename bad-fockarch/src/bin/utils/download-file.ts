@@ -1,37 +1,48 @@
 import https from "https";
-import fs, { existsSync } from "fs";
+
 import { rm } from "node:fs/promises";
+import { existsSync, createWriteStream, mkdirSync } from "node:fs";
+
 import { parse } from "path";
 
-const createDir = (filePath: string, dirs: string[] = []) => {
-	const path = parse(filePath).dir;
+const createDir = (path: string) => {
+	const dirs: string[] = [];
 
-	if (existsSync(path)) {
-		return dirs;
-	};
+	const create = (filePath: string = path) => {
+		const path = parse(filePath).dir;
 
-	dirs.push(path);
-	createDir(path, dirs);
+		if (existsSync(path)) return dirs;
 
-	return dirs;
+		dirs.unshift(path);
+		return create(path);
+	}
+
+	return create(path);
 }
 
 export const downloadFile = async (url: string, path: string) => {
-	return rm(parse(path).dir, { force: true, recursive: true }).then(() => {
-		createDir(path).reverse().forEach(path => {
-			fs.mkdirSync(path);
-		});
-	
-		const file = fs.createWriteStream(path);
-	
-		return https.get(url, (res) => {
-			console.log("downloading...");
-			res.pipe(file);
-	
-			file.on("finish", () => {
-				console.log("downloaded!");
-				file.close();
+	const dirPath = parse(path).dir;
+
+	return new Promise((resolve, reject) => {
+		rm(dirPath, { force: true, recursive: true}).then(() => {
+			createDir(path).forEach(path => {
+				mkdirSync(path);
+			});
+			
+			const file = createWriteStream(path);
+
+			https.get(url, (res) => {
+				console.log("downloading...");
+				res.pipe(file);
+		
+				file.on("finish", () => {
+					console.log("downloaded!");
+					file.close();
+					resolve(true);
+				});
+
+				file.on("error", reject);
 			});
 		});
-	})
-}
+	});
+};
