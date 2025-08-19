@@ -1,8 +1,19 @@
 {
   "name": "bad-template",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "backend after drinking",
+  "author": {
+    "name": "Lazy And Focused",
+    "email": "laf.love.command@gmail.com",
+    "url": "https://laf-team.ru"
+  },
+  "contributors": [
+    {
+      "name": "FOCKUSTY",
+      "email": "viserd.yt@gmail.com",
+      "url": "https://fockusty.netlify.app"
+    }
+  ],
   "private": true,
   "license": "MIT",
   "scripts": {
