@@ -48,18 +48,21 @@ export class CreateCommand extends Command<Props> {
   };
   
   public async execute(argv: ArgumentsCamelCase<Props>): Promise<void> {
-    console.log("Название: " + argv.name);
-    console.log("Путь: " + argv.path);
-    console.log("Пакетный менеджер: " + argv.packageManager);
+    const { name, path, packageManager } = argv;
 
-    const folderPath = `${argv.path}${argv.name}`;
+    console.log("Название: " + name);
+    console.log("Путь: " + path);
+    console.log("Пакетный менеджер: " + packageManager);
+
+    const slashIsLast = path[path.length-1] === "/";
+    const folderPath = `${slashIsLast ? path : path + "/"}${name}`;
     const filePath = `${folderPath}/${RELEASE_FILE_NAME}`;
 
     const url = await this.fetchRelease();
     
     await this.downloadRelease(url, filePath);
     await this.extractFile(filePath);
-    await this.downloadPackages(folderPath, argv.packageManager);
+    await this.downloadPackages(folderPath, packageManager);
 
     return;
   }
