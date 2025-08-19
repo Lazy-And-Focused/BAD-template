@@ -1,5 +1,6 @@
-import { Controller, Get, Injectable, Next, Req, Res } from "@nestjs/common";
 import type { NextFunction, Request, Response } from "express";
+
+import { Controller, Get, Injectable, Next, Req, Res } from "@nestjs/common";
 
 import { ROUTE, ROUTES } from "./auth.routes";
 

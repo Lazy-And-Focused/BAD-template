@@ -1,6 +1,9 @@
-import { Next, Req, Res } from "@nestjs/common";
-import { Auth, AUTH_TYPES, AuthTypes } from "types";
 import type { NextFunction, Request, Response } from "express";
+
+import type { Auth, AuthTypes } from "types";
+import { AUTH_TYPES } from "types";
+
+import { Next, Req, Res } from "@nestjs/common";
 
 import passport = require("passport");
 
@@ -37,7 +40,7 @@ class AuthApi {
         methods: AUTH_TYPES
       },
       method: this._method
-      }
+    }
   }
 
   public auth(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction): unknown {

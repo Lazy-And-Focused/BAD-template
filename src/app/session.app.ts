@@ -1,5 +1,5 @@
-import { INestApplication } from "@nestjs/common";
-import { Express } from "express";
+import type { INestApplication } from "@nestjs/common";
+import type { Express } from "express";
 
 class Session {
   private readonly _secret: string;

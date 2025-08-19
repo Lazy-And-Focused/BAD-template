@@ -1,9 +1,10 @@
+import type { Profile } from "passport";
+import type { Strategy, VerifyCallback, VerifyFunction } from "passport-oauth2";
+
+import type { AuthTypes } from "types";
+
 import passport = require("passport");
-import { Profile } from "passport";
 
-import { Strategy, VerifyCallback, VerifyFunction } from "passport-oauth2";
-
-import { AuthTypes } from "types";
 import { getPassportEnv } from "services/env.service";
 
 /* const CreateOrUpdate = async <T>({
@@ -52,6 +53,7 @@ class Authenticator {
 
         /* 
           AUTH AND USER CREATING...
+          (use CreateOrUpdate)
         */
 
         return done(null, null);

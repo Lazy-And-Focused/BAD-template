@@ -1,8 +1,8 @@
+import type { Auth } from "types";
+
 import passport = require("passport");
 
 import Authenticator from "./authenticator";
-
-import { Auth } from "types";
 
 export class Strategy {
   protected readonly _passport: passport.PassportStatic = passport;

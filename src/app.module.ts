@@ -1,7 +1,11 @@
-import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common";
-import { LoggerMiddleware } from "./middleware/logger.middleware";
+import type { NestModule, MiddlewareConsumer } from "@nestjs/common";
+
+import { Module } from "@nestjs/common";
+
 import { APP_INTERCEPTOR, RouterModule } from "@nestjs/core";
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
+
+import { LoggerMiddleware } from "./middleware/logger.middleware";
 
 import AuthModule from "./routes/auth/auth.module";
 

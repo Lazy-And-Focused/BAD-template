@@ -1,6 +1,8 @@
-import { AUTH_TYPES, AuthTypes } from "types";
 import { config } from "dotenv";
 config();
+
+import type { AuthTypes } from "types";
+import { AUTH_TYPES } from "types";
 
 export const REQUIRED = [
   "CLIENT_URL",

@@ -1,7 +1,8 @@
+import type { Request } from "express";
+
 import crypto from "crypto";
 
 import { env } from "./env.service";
-import { Request } from "express";
 
 const PARSE_ERROR = {
   successed: false,
@@ -9,11 +10,12 @@ const PARSE_ERROR = {
   profile_id: false,
   token: false
 } as const;
+
 type ParseReturnType = Readonly<{
-  successed: true;
-  id: string;
-  profile_id: string;
-  token: string;
+  successed: true,
+  id: string,
+  profile_id: string,
+  token: string
 }> | typeof PARSE_ERROR;
 
 class Hash {

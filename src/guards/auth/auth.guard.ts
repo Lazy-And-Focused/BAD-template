@@ -1,7 +1,8 @@
+import type { Reflector } from "@nestjs/core";
+import type { Request } from "express";
+import type { Observable } from "rxjs";
+
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
-import { Reflector } from "@nestjs/core";
-import { Request } from "express";
-import { Observable } from "rxjs";
 
 import Service from "./auth-guard.service";
 

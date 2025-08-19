@@ -1,8 +1,7 @@
-import { Request } from "express";
+import type { Request } from "express";
+import type { Auth } from "types";
 
 import Hash from "services/hash.service";
-
-import { Auth } from "types";
 
 export class Service {
   public static async validateRequest(req: Request) {
