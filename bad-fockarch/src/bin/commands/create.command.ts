@@ -1,12 +1,17 @@
-import { ArgumentsCamelCase, PositionalOptions } from "yargs";
+import type { ArgumentsCamelCase, PositionalOptions } from "yargs";
 
 import { exec } from "child_process";
 
 import Command from "./command.type";
 
-import { getDownloadUrl, RELEASE_FILE_NAME, RELEASE_URL } from "../utils/constants";
-import { downloadFile } from "../utils/download-file";
-import { extractFile } from "../utils/extract-file";
+import {
+  getDownloadUrl,
+
+  RELEASE_URL,
+  RELEASE_FILE_NAME,
+} from "../utils";
+
+import { downloadFile, extractFile } from "../utils/files";
 
 type Props = {
   name: string,
