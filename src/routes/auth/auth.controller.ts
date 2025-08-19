@@ -25,14 +25,12 @@ export class AuthController {
 
   @Get(ROUTES.GET)
   public auth(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
-    new AuthApi(req.params.method).auth(req, res, next);
-
-    return;
+    return new AuthApi(req.params.method).auth(req, res, next);
   }
 
   @Get(ROUTES.GET_CALLBACK)
   public callback(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
-    new AuthApi(req.params.method).callback(req, res, next, (...args) => {
+    return new AuthApi(req.params.method).callback(req, res, next, (...args) => {
       const user = args[1];
 
       if (!user) return;
@@ -41,6 +39,7 @@ export class AuthController {
         "id-token",
         `${user.id}-${user.profile_id}-${new Hash().execute(user.access_token)}`
       );
+      
       res.redirect(env.CLIENT_URL);
     });
   }
