@@ -1,6 +1,8 @@
 import type { INestApplication } from "@nestjs/common";
 import type { Express } from "express";
 
+import expressSession = require("express-session");
+
 export const ONE_WEEK = 60000 * 60 * 24 * 7;
 
 export class Session {
@@ -34,7 +36,7 @@ export class Session {
 
   public create() {
     this._app.use(
-      require("express-session")({
+      expressSession({
         secret: this._secret,
         resave: this._resave,
         saveUninitialized: this._save_uninitialized,
