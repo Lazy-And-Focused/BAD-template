@@ -19,29 +19,42 @@ export class AuthController {
     return {
       message: `Sorry, but you can't auth without method, try next methods:\n${toStr(methods)}\nAnd this abbreviations:\n${toStr(abbreviations)}`,
       abbreviations,
-      methods
+      methods,
     };
   }
 
   @Get(ROUTES.GET)
-  public auth(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
+  public auth(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
     return new AuthApi(req.params.method).auth(req, res, next);
   }
 
   @Get(ROUTES.GET_CALLBACK)
-  public callback(@Req() req: Request, @Res() res: Response, @Next() next: NextFunction) {
-    return new AuthApi(req.params.method).callback(req, res, next, (...args) => {
-      const user = args[1];
+  public callback(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    return new AuthApi(req.params.method).callback(
+      req,
+      res,
+      next,
+      (...args) => {
+        const user = args[1];
 
-      if (!user) return;
+        if (!user) return;
 
-      res.cookie(
-        "id-token",
-        `${user.id}-${user.profile_id}-${new Hash().execute(user.access_token)}`
-      );
-      
-      res.redirect(env.CLIENT_URL);
-    });
+        res.cookie(
+          "id-token",
+          `${user.id}-${user.profile_id}-${new Hash().execute(user.access_token)}`,
+        );
+
+        res.redirect(env.CLIENT_URL);
+      },
+    );
   }
 }
 

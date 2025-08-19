@@ -4,19 +4,14 @@ import { exec } from "child_process";
 
 import Command from "./command.type";
 
-import {
-  getDownloadUrl,
-
-  RELEASE_URL,
-  RELEASE_FILE_NAME,
-} from "../utils";
+import { getDownloadUrl, RELEASE_URL, RELEASE_FILE_NAME } from "../utils";
 
 import { downloadFile, extractFile } from "../utils/files";
 
 type Props = {
-  name: string,
-  path: string,
-  "package-manager": "npm"|"pnpm",
+  name: string;
+  path: string;
+  "package-manager": "npm" | "pnpm";
 };
 
 export class CreateCommand extends Command<Props> {
@@ -26,13 +21,13 @@ export class CreateCommand extends Command<Props> {
     name: {
       type: "string",
       default: "bad-app",
-      describe: "name of your app folder"
+      describe: "name of your app folder",
     },
 
     path: {
       type: "string",
       default: "./",
-      describe: "path to your folder"
+      describe: "path to your folder",
     },
 
     "package-manager": {
@@ -40,13 +35,10 @@ export class CreateCommand extends Command<Props> {
       default: "npm",
       describe: "Your package manager (npm/pnpm)",
       alias: "pm",
-      choices: [
-        "npm",
-        "pnpm"
-      ]
-    }
+      choices: ["npm", "pnpm"],
+    },
   };
-  
+
   public async execute(argv: ArgumentsCamelCase<Props>): Promise<void> {
     const { name, path, packageManager } = argv;
 
@@ -54,12 +46,12 @@ export class CreateCommand extends Command<Props> {
     console.log("Путь: " + path);
     console.log("Пакетный менеджер: " + packageManager);
 
-    const slashIsLast = path[path.length-1] === "/";
+    const slashIsLast = path[path.length - 1] === "/";
     const folderPath = `${slashIsLast ? path : path + "/"}${name}`;
     const filePath = `${folderPath}/${RELEASE_FILE_NAME}`;
 
     const url = await this.fetchRelease();
-    
+
     await this.downloadRelease(url, filePath);
     await this.extractFile(filePath);
     await this.downloadPackages(folderPath, packageManager);
@@ -67,23 +59,26 @@ export class CreateCommand extends Command<Props> {
     return;
   }
 
-  private async downloadPackages(path: string, packageManager: "npm"|"pnpm") {
+  private async downloadPackages(path: string, packageManager: "npm" | "pnpm") {
     console.log("Packages downloading...");
 
-    exec(`cd ${path} && ${packageManager} --save install`, function (error, stdout, stderr) {
-      console.log('stdout:\n' + stdout);
-      console.log('stderr:\n' + stderr);
-      
-      if (error !== null) {
-        console.log('exec error:\n' + error);
-      }
-    });
+    exec(
+      `cd ${path} && ${packageManager} --save install`,
+      function (error, stdout, stderr) {
+        console.log("stdout:\n" + stdout);
+        console.log("stderr:\n" + stderr);
+
+        if (error !== null) {
+          console.log("exec error:\n" + error);
+        }
+      },
+    );
   }
 
   private async extractFile(path: string) {
     return new Promise<boolean>((resolve) => {
       extractFile(path);
-      
+
       setTimeout(() => resolve(true), 1000);
     });
   }
@@ -102,7 +97,7 @@ export class CreateCommand extends Command<Props> {
 
   private async fetchRelease() {
     const response = await fetch(RELEASE_URL, {
-      method: "GET"
+      method: "GET",
     });
 
     const release = await response.json();

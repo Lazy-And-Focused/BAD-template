@@ -19,12 +19,13 @@ import { getPassportEnv } from "services/env.service";
   // database code...
 }; */
 
-const defaultPassports: Record<AuthTypes, { path: string; scopes: string[] }> = {
-  google: {
-    path: "passport-google-oauth20",
-    scopes: []
-  }
-};
+const defaultPassports: Record<AuthTypes, { path: string; scopes: string[] }> =
+  {
+    google: {
+      path: "passport-google-oauth20",
+      scopes: [],
+    },
+  };
 
 export class Authenticator {
   private readonly _passport: passport.PassportStatic;
@@ -36,18 +37,25 @@ export class Authenticator {
   public init = () => {
     for (const passport in defaultPassports) {
       const { path, scopes } = defaultPassports[passport];
-      
+
       const { Strategy } = require(path);
       this.strategy(Strategy, {
         ...getPassportEnv(passport.toUpperCase() as Uppercase<AuthTypes>),
         type: path,
-        scopes: scopes
+        scopes: scopes,
       });
     }
   };
 
-  protected verify<Done extends (...data: unknown[]) => void = VerifyCallback>(type: AuthTypes) {
-    return async (access_token: string, refresh_token: string, profile: Profile, done: Done) => {
+  protected verify<Done extends (...data: unknown[]) => void = VerifyCallback>(
+    type: AuthTypes,
+  ) {
+    return async (
+      access_token: string,
+      refresh_token: string,
+      profile: Profile,
+      done: Done,
+    ) => {
       try {
         // const { id } = profile;
 
@@ -73,7 +81,7 @@ export class Authenticator {
         callbackURL: string;
         scope?: string[];
       },
-      verify: VerifyFunction
+      verify: VerifyFunction,
     ) => Strategy,
     api: {
       id: string;
@@ -83,7 +91,7 @@ export class Authenticator {
       type: AuthTypes;
       authURL?: string;
       tokenURL?: string;
-    }
+    },
   ) {
     this._passport.use(
       new strategy(
@@ -91,10 +99,10 @@ export class Authenticator {
           clientID: api.id,
           clientSecret: api.secret,
           callbackURL: api.callback,
-          scope: api.scopes
+          scope: api.scopes,
         },
-        this.verify(api.type)
-      )
+        this.verify(api.type),
+      ),
     );
   }
 }

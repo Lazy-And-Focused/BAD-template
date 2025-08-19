@@ -6,7 +6,7 @@ import {
   existsSync,
   mkdirSync,
   rmSync,
-  writeFileSync
+  writeFileSync,
 } from "fs";
 
 import { join, parse } from "path";
@@ -17,21 +17,22 @@ export const extractFile = (path: string): void => {
   extract.on("entry", (header, stream, callback) => {
     const dirPath = parse(path).dir;
     const filePath = join(dirPath, header.name);
-    
-    const isHeaderFolderAndExists = header.type === "directory" && existsSync(filePath);
+
+    const isHeaderFolderAndExists =
+      header.type === "directory" && existsSync(filePath);
     if (isHeaderFolderAndExists) {
       mkdirSync(filePath);
     } else {
       writeFileSync(filePath, "", "utf-8");
-    };
-    
+    }
+
     let file = "";
     stream.on("data", (chunk) => {
       file += chunk;
       writeFileSync(filePath, file);
     });
 
-    stream.on('end', callback);
+    stream.on("end", callback);
     stream.resume();
   });
 
@@ -39,7 +40,5 @@ export const extractFile = (path: string): void => {
     rmSync(path, { force: true, recursive: true });
   });
 
-  createReadStream(path)
-    .pipe(zlib.createGunzip())
-    .pipe(extract);
-}
+  createReadStream(path).pipe(zlib.createGunzip()).pipe(extract);
+};

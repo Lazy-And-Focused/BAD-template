@@ -8,15 +8,17 @@ const PARSE_ERROR = {
   successed: false,
   id: false,
   profile_id: false,
-  token: false
+  token: false,
 } as const;
 
-type ParseReturnType = Readonly<{
-  successed: true,
-  id: string,
-  profile_id: string,
-  token: string
-}> | typeof PARSE_ERROR;
+type ParseReturnType =
+  | Readonly<{
+      successed: true;
+      id: string;
+      profile_id: string;
+      token: string;
+    }>
+  | typeof PARSE_ERROR;
 
 export class Hash {
   private readonly _hmac: crypto.Hmac;
@@ -33,30 +35,32 @@ export class Hash {
   public static generateCode(data: string = (Math.random() * 1000).toString()) {
     return crypto
       .createHmac("sha512", env.HASH_KEY)
-      .update((new Date().getTime().toString() + data))
+      .update(new Date().getTime().toString() + data)
       .digest("base64");
   }
 
   public static resolveToken(token: string): ParseReturnType {
-    const [ method, hash ] = token.split(" ");
+    const [method, hash] = token.split(" ");
 
     const tokenValided = method && hash;
     if (!tokenValided) {
       return PARSE_ERROR;
-    };
+    }
 
     if (method === "Bearer") {
-      const [ id, profile_id, access_token ] = hash.split("-");
+      const [id, profile_id, access_token] = hash.split("-");
 
       const valided = id && profile_id && access_token;
       if (!valided) {
         return PARSE_ERROR;
-      };
+      }
 
       return {
         successed: true,
-        id, profile_id, token: access_token
-      }
+        id,
+        profile_id,
+        token: access_token,
+      };
     } else {
       return PARSE_ERROR;
     }
@@ -67,12 +71,12 @@ export class Hash {
 
     if (hash === undefined) {
       return PARSE_ERROR;
-    };
- 
+    }
+
     try {
       return Hash.resolveToken(hash.toString());
     } catch (error) {
-      return PARSE_ERROR;      
+      return PARSE_ERROR;
     }
   }
 }

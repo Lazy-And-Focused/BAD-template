@@ -13,7 +13,7 @@ export class Session {
   private readonly _save_uninitialized: boolean = false;
 
   private readonly _cookie: { maxAge: number } = {
-    maxAge: ONE_WEEK
+    maxAge: ONE_WEEK,
   };
 
   constructor(
@@ -24,13 +24,14 @@ export class Session {
       saveUninitialized?: boolean;
       cookie?: { maxAge: number };
       mongoUrl?: string;
-    }
+    },
   ) {
     this._secret = secret;
     this._app = app;
 
     this._resave = data?.resave || this._resave;
-    this._save_uninitialized = data?.saveUninitialized || this._save_uninitialized;
+    this._save_uninitialized =
+      data?.saveUninitialized || this._save_uninitialized;
     this._cookie = data?.cookie || this._cookie;
   }
 
@@ -41,7 +42,7 @@ export class Session {
         resave: this._resave,
         saveUninitialized: this._save_uninitialized,
         cookie: this._cookie,
-      })
+      }),
     );
   }
 }

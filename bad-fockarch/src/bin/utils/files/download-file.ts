@@ -6,45 +6,48 @@ import { existsSync, createWriteStream, mkdirSync } from "node:fs";
 import { parse } from "path";
 
 const createDir = (path: string): string[] => {
-	const dirs: string[] = [];
+  const dirs: string[] = [];
 
-	const create = (filePath: string = path) => {
-		const path = parse(filePath).dir;
+  const create = (filePath: string = path) => {
+    const path = parse(filePath).dir;
 
-		if (existsSync(path)) return dirs;
+    if (existsSync(path)) return dirs;
 
-		dirs.unshift(path);
-		return create(path);
-	}
+    dirs.unshift(path);
+    return create(path);
+  };
 
-	return create(path);
-}
+  return create(path);
+};
 
-export const downloadFile = async (url: string, path: string): Promise<boolean|unknown> => {
-	const dirPath = parse(path).dir;
+export const downloadFile = async (
+  url: string,
+  path: string,
+): Promise<boolean | unknown> => {
+  const dirPath = parse(path).dir;
 
-	return new Promise<boolean|unknown>((resolve, reject) => {
-		rm(dirPath, { force: true, recursive: true})
-			.then(() => {
-				createDir(path).forEach(path => {
-					mkdirSync(path);
-				});
-				
-				const file = createWriteStream(path);
+  return new Promise<boolean | unknown>((resolve, reject) => {
+    rm(dirPath, { force: true, recursive: true })
+      .then(() => {
+        createDir(path).forEach((path) => {
+          mkdirSync(path);
+        });
 
-				https.get(url, (response) => {
-					console.log("downloading...");
-					response.pipe(file);
-			
-					file.on("finish", () => {
-						console.log("downloaded!");
-						file.close();
-						resolve(true);
-					});
+        const file = createWriteStream(path);
 
-					file.on("error", reject);
-				});
-			})
-			.catch(reject)
-	});
+        https.get(url, (response) => {
+          console.log("downloading...");
+          response.pipe(file);
+
+          file.on("finish", () => {
+            console.log("downloaded!");
+            file.close();
+            resolve(true);
+          });
+
+          file.on("error", reject);
+        });
+      })
+      .catch(reject);
+  });
 };
