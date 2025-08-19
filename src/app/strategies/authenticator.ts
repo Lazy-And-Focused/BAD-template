@@ -26,7 +26,7 @@ const defaultPassports: Record<AuthTypes, { path: string; scopes: string[] }> = 
   }
 };
 
-class Authenticator {
+export class Authenticator {
   private readonly _passport: passport.PassportStatic;
 
   public constructor(passport: passport.PassportStatic) {

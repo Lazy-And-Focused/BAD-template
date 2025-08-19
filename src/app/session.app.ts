@@ -1,7 +1,7 @@
 import type { INestApplication } from "@nestjs/common";
 import type { Express } from "express";
 
-class Session {
+export class Session {
   private readonly _secret: string;
   private readonly _app: INestApplication<unknown> | Express;
 

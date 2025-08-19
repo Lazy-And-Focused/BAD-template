@@ -18,7 +18,7 @@ type ParseReturnType = Readonly<{
   token: string
 }> | typeof PARSE_ERROR;
 
-class Hash {
+export class Hash {
   private readonly _hmac: crypto.Hmac;
 
   public constructor() {

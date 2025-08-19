@@ -9,7 +9,7 @@ import passport = require("passport");
 
 const abbreviations: Map<string, AuthTypes> = new Map([]);
 
-class AuthApi {
+export class AuthApi {
   private readonly _method: string;
 
   public constructor(method: string) {

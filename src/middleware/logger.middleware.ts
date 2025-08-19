@@ -9,3 +9,5 @@ export class LoggerMiddleware implements NestMiddleware {
     next();
   }
 }
+
+export default LoggerMiddleware;
