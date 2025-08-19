@@ -1,6 +1,7 @@
 import type { ArgumentsCamelCase, PositionalOptions } from "yargs";
 
 import { exec } from "child_process";
+import { join } from "path";
 
 import Command from "./command.type";
 
@@ -46,9 +47,8 @@ export class CreateCommand extends Command<Props> {
     console.log("Путь: " + path);
     console.log("Пакетный менеджер: " + packageManager);
 
-    const slashIsLast = path[path.length - 1] === "/";
-    const folderPath = `${slashIsLast ? path : path + "/"}${name}`;
-    const filePath = `${folderPath}/${RELEASE_FILE_NAME}`;
+    const folderPath = join(path, name);
+    const filePath = join(folderPath, RELEASE_FILE_NAME);
 
     const url = await this.fetchRelease();
 
@@ -64,7 +64,7 @@ export class CreateCommand extends Command<Props> {
 
     exec(
       `cd ${path} && ${packageManager} --save install`,
-      function (error, stdout, stderr) {
+      (error, stdout, stderr) => {
         console.log("stdout:\n" + stdout);
         console.log("stderr:\n" + stderr);
 
