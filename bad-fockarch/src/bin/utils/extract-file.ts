@@ -9,7 +9,7 @@ import {
   writeFileSync
 } from "fs";
 
-import { join, parse } from "path"
+import { join, parse } from "path";
 
 export const extractFile = (path: string) => {
   const extract = tar.extract();
