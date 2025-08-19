@@ -97,11 +97,14 @@ export class CreateCommand extends Command<Props> {
   }
 
   private async fetchRelease() {
-    const data = await (await fetch(RELEASE_URL, {
+    const response = await fetch(RELEASE_URL, {
       method: "GET"
-    })).json();
+    });
 
-    return (await fetch(getDownloadUrl(data.tag_name))).url;    
+    const release = await response.json();
+    const { url } = await fetch(getDownloadUrl(release.tag_name));
+
+    return url;
   }
 }
 
