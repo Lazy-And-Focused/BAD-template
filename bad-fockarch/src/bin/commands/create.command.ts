@@ -81,18 +81,22 @@ export class CreateCommand extends Command<Props> {
   }
 
   private async extractFile(path: string) {
-    return new Promise((res) => {
+    return new Promise<boolean>((resolve) => {
       extractFile(path);
       
-      setTimeout(() => res(true), 1000);
+      setTimeout(() => resolve(true), 1000);
     });
   }
 
   private async downloadRelease(url: string, path: string) {
-    return new Promise((res) => {
-      downloadFile(url, path).then(() =>
-        setTimeout(() =>
-          res(true), 1000));
+    return new Promise<boolean>((resolve, reject) => {
+      downloadFile(url, path)
+        .then(() => {
+          setTimeout(() => {
+            resolve(true);
+          }, 1000);
+        })
+        .catch(reject);
     });
   }
 

@@ -5,7 +5,7 @@ import { existsSync, createWriteStream, mkdirSync } from "node:fs";
 
 import { parse } from "path";
 
-const createDir = (path: string) => {
+const createDir = (path: string): string[] => {
 	const dirs: string[] = [];
 
 	const create = (filePath: string = path) => {
@@ -20,29 +20,31 @@ const createDir = (path: string) => {
 	return create(path);
 }
 
-export const downloadFile = async (url: string, path: string) => {
+export const downloadFile = async (url: string, path: string): Promise<boolean|unknown> => {
 	const dirPath = parse(path).dir;
 
-	return new Promise((resolve, reject) => {
-		rm(dirPath, { force: true, recursive: true}).then(() => {
-			createDir(path).forEach(path => {
-				mkdirSync(path);
-			});
-			
-			const file = createWriteStream(path);
-
-			https.get(url, (res) => {
-				console.log("downloading...");
-				res.pipe(file);
-		
-				file.on("finish", () => {
-					console.log("downloaded!");
-					file.close();
-					resolve(true);
+	return new Promise<boolean|unknown>((resolve, reject) => {
+		rm(dirPath, { force: true, recursive: true})
+			.then(() => {
+				createDir(path).forEach(path => {
+					mkdirSync(path);
 				});
+				
+				const file = createWriteStream(path);
 
-				file.on("error", reject);
-			});
-		});
+				https.get(url, (response) => {
+					console.log("downloading...");
+					response.pipe(file);
+			
+					file.on("finish", () => {
+						console.log("downloaded!");
+						file.close();
+						resolve(true);
+					});
+
+					file.on("error", reject);
+				});
+			})
+			.catch(reject)
 	});
 };

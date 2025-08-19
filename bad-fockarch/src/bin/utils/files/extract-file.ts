@@ -11,14 +11,14 @@ import {
 
 import { join, parse } from "path";
 
-export const extractFile = (path: string) => {
+export const extractFile = (path: string): void => {
   const extract = tar.extract();
 
   extract.on("entry", (header, stream, callback) => {
     const dirPath = parse(path).dir;
     const filePath = join(dirPath, header.name);
     
-    const isHeaderFolderAndExists = header.type === "directory" && existsSync(filePath); 
+    const isHeaderFolderAndExists = header.type === "directory" && existsSync(filePath);
     if (isHeaderFolderAndExists) {
       mkdirSync(filePath);
     } else {

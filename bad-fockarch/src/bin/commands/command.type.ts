@@ -1,4 +1,4 @@
-import { PositionalOptions, ArgumentsCamelCase } from "yargs";
+import type { PositionalOptions, ArgumentsCamelCase } from "yargs";
 
 export interface ICommand<T extends {[key: string]: unknown}> {
   command: string|string[],
