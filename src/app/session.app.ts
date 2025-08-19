@@ -1,6 +1,8 @@
 import type { INestApplication } from "@nestjs/common";
 import type { Express } from "express";
 
+export const ONE_WEEK = 60000 * 60 * 24 * 7;
+
 export class Session {
   private readonly _secret: string;
   private readonly _app: INestApplication<unknown> | Express;
@@ -9,7 +11,7 @@ export class Session {
   private readonly _save_uninitialized: boolean = false;
 
   private readonly _cookie: { maxAge: number } = {
-    maxAge: 60000 * 60 * 24 * 7
+    maxAge: ONE_WEEK
   };
 
   constructor(
