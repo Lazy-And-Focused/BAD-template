@@ -6,13 +6,13 @@ import { join } from "path";
 export class Loader {
   public static readonly fileRegExp = /.+\.command\.(?:ts|js)/;
 
-  public execute() {
+  public execute(): Command<{ [key: string]: unknown }>[] {
     return this.filterFiles(this.readFolder()).map((file) =>
       this.readFile(file),
     );
   }
 
-  private readFile(file: string) {
+  private readFile(file: string): Command<{ [key: string]: unknown }> {
     const data = require(join(__dirname, file));
     const command = new data.default();
 
@@ -23,11 +23,11 @@ export class Loader {
     }
   }
 
-  private filterFiles(files: string[]) {
+  private filterFiles(files: string[]): string[] {
     return files.filter((file) => Loader.fileRegExp.test(file));
   }
 
-  private readFolder() {
+  private readFolder(): string[] {
     return readdirSync(__dirname);
   }
 }

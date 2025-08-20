@@ -59,32 +59,37 @@ export class CreateCommand extends Command<Props> {
     return;
   }
 
-  private async downloadPackages(path: string, packageManager: "npm" | "pnpm") {
+  private async downloadPackages(path: string, packageManager: "npm" | "pnpm"): Promise<boolean|unknown> {
     console.log("Packages downloading...");
 
-    exec(
-      `cd ${path} && ${packageManager} --save install`,
-      (error, stdout, stderr) => {
-        console.log("stdout:\n" + stdout);
-        console.log("stderr:\n" + stderr);
+    return new Promise<boolean|unknown>((resolve, reject) => {
+      exec(
+        `cd ${path} && ${packageManager} --save install`,
+        (error, stdout, stderr) => {
+          console.log("stdout:\n" + stdout);
+          console.log("stderr:\n" + stderr);
+  
+          if (error !== null) {
+            console.log("exec error:\n" + error);
+            reject(error);
+          }
 
-        if (error !== null) {
-          console.log("exec error:\n" + error);
-        }
-      },
-    );
+          resolve(true);
+        },
+      );
+    });
   }
 
-  private async extractFile(path: string) {
-    return new Promise<boolean>((resolve) => {
+  private async extractFile(path: string): Promise<true> {
+    return new Promise<true>((resolve) => {
       extractFile(path);
 
       setTimeout(() => resolve(true), 1000);
     });
   }
 
-  private async downloadRelease(url: string, path: string) {
-    return new Promise<boolean>((resolve, reject) => {
+  private async downloadRelease(url: string, path: string): Promise<boolean|unknown> {
+    return new Promise<boolean|unknown>((resolve, reject) => {
       downloadFile(url, path)
         .then(() => {
           setTimeout(() => {
@@ -95,7 +100,7 @@ export class CreateCommand extends Command<Props> {
     });
   }
 
-  private async fetchRelease() {
+  private async fetchRelease(): Promise<string> {
     const response = await fetch(RELEASE_URL, {
       method: "GET",
     });
