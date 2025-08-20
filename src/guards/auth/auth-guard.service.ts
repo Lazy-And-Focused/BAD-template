@@ -1,15 +1,16 @@
-import { Request } from "express";
+import type { Request } from "express";
+import type { Auth } from "types";
 
 import Hash from "services/hash.service";
 
-import { Auth } from "types";
+import authErrors from "src/errors/guards/auth.errors";
 
 export class Service {
   public static async validateRequest(req: Request) {
     const { successed, id, token, profile_id } = Hash.parse(req);
 
     if (!successed) {
-      console.log("User blocked: Hash parse error 0001");
+      console.log(authErrors.HASH_PARSE);
       return false;
     }
 
@@ -17,17 +18,17 @@ export class Service {
     // const findedUser = await auth.findOne({ id: id });
 
     if (!findedUser) {
-      console.log("User blocked: User not found 0002");
+      console.log(authErrors.USER_NOT_FOUND);
       return false;
     }
 
     if (findedUser.profile_id !== profile_id) {
-      console.log("User blocked: Profile id is not equals 0003");
+      console.log(authErrors.PROFILE_ID_ERROR);
       return false;
     }
 
     if (token !== new Hash().execute(findedUser.access_token)) {
-      console.log("User blocked: Token is not equals 0004");
+      console.log(authErrors.TOKEN_ERROR);
       return false;
     }
 
@@ -35,7 +36,7 @@ export class Service {
     // const profileUser = await users.model.findOne({ id: findedUser.profile_id });
 
     if (!profileUser) {
-      console.log("User blocked: Profile not found 0005");
+      console.log(authErrors.PROFILE_NOT_FOUND);
       return false;
     }
 

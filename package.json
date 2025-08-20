@@ -1,8 +1,19 @@
 {
   "name": "bad-template",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "backend after drinking",
+  "author": {
+    "name": "Lazy-And-Focused",
+    "email": "laf.love.command@gmail.com",
+    "url": "https://laf-team.ru"
+  },
+  "contributors": [
+    {
+      "name": "FOCKUSTY",
+      "email": "viserd.yt@gmail.com",
+      "url": "https://fockusty.netlify.app"
+    }
+  ],
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -40,6 +51,7 @@
     "@angular-devkit/schematics-cli": "^20.1.6",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@lazy-and-focused/prettier-config": "^1.0.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",

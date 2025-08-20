@@ -1,5 +1,6 @@
 # Файлы BAD
 
+<!-- prettier-ignore -->
 ## Создания роутера
 
 ```cmd
@@ -17,7 +18,8 @@ nest g bad $ROUTE
 > fock — указание создателя архитектуры.
 > arch — указание, что это архитектура
 
-После этого в категории `~/routes/` у вас создаться ещё одна категория с названием $ROUTE и следующим содержимым:
+После этого в категории `~/routes/` у вас создаться ещё одна категория
+с названием $ROUTE и следующим содержимым:
 
 - `dto/`
   - `$ROUTE-create.dto.ts`
@@ -31,19 +33,23 @@ nest g bad $ROUTE
 
 ## `dto/`
 
-Категория с объектами передачи данных. Позволяет интегрировать типы с документацией API сразу же. Можно использовать в других роутерах.
+Категория с объектами передачи данных. Позволяет интегрировать типы с
+документацией API сразу же. Можно использовать в других роутерах.
 
 ### `/$ROUTE-create.dto.ts`
 
-Файл передачи данных, используемый для создания сущности в базе данных приложения.
+Файл передачи данных, используемый для создания сущности в базе данных
+приложения.
 
 ### `/$ROUTE-update.dto.ts`
 
-Файл передачи данных, используемый для обновления сущности в базе данных приложения.
+Файл передачи данных, используемый для обновления сущности в базе
+данных приложения.
 
 ## `$ROUTE.routes.ts`
 
-Файл в котором будут основные пути для контроллера. Следует следовать следующему паттерну:
+Файл в котором будут основные пути для контроллера. Следует следовать
+следующему паттерну:
 
 ```ts
 /* 
@@ -58,12 +64,12 @@ const ROUTE: string | string[] = "/$ROUTE";
   `ROUTES.GET_ONE` — Тоже самое, как GET, но получается вместо списка всего одну сущность.
 */
 const ROUTES: Record<string, string> = {
-  "GET": "/",
-  "GET_ONE": "/:id",
-  "POST": "/",
-  "PUT": "/:id",
-  "PATCH": "/:id",
-  "DELETE": "/:id",
+  GET: "/",
+  GET_ONE: "/:id",
+  POST: "/",
+  PUT: "/:id",
+  PATCH: "/:id",
+  DELETE: "/:id",
 };
 ```
 
@@ -79,23 +85,25 @@ import env from "@env";
 export class Service {
   public async get(token: string, profileId: string) {
     try {
-      const data = await (await fetch(env.GOOGLE_API_URL + "/people/" + profileId, {
-        method: "GET",
-        headers: { Authorization: token }
-      })).json();
-      
+      const data = await (
+        await fetch(env.GOOGLE_API_URL + "/people/" + profileId, {
+          method: "GET",
+          headers: { Authorization: token },
+        })
+      ).json();
+
       return {
         successed: true,
         data,
-        error: null
-      }
+        error: null,
+      };
     } catch (error) {
       console.error(error);
-      
+
       return {
         succssed: false,
         data: null,
-        error: (error instanceof Error) ? error.message : "some error"
+        error: error instanceof Error ? error.message : "some error",
       };
     }
   }
@@ -109,7 +117,7 @@ import GoogleApi from "api/google";
 
 export class Service {
   public get(token: string, profileId: string) {
-      return new GoogleApi(token).get(profileId);
+    return new GoogleApi(token).get(profileId);
   }
 }
 
@@ -138,108 +146,101 @@ import {
   Patch,
   Delete,
   UseGuards,
-  HttpStatus
+  HttpStatus,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 
 import { ROUTE, ROUTES } from "./users.routes";
-import { Service } from "./users.service.ts"
+import { Service } from "./users.service.ts";
 
 @Injectable()
 @NestController(ROUTE)
 @UseGuards(AuthGuard)
 export class Controller {
-  public constructor(
-    private readonly service: Service
-  ) {}
+  public constructor(private readonly service: Service) {}
 
   @ApiOperation({
-    summary: "Getting an array of users"
+    summary: "Getting an array of users",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @Get(ROUTES.GET)
   @Public()
   public get() {
-    return this.service.get()
+    return this.service.get();
   }
 
   @ApiOperation({
-    summary: "Getting a users by id"
+    summary: "Getting a users by id",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @Get(ROUTES.GET_ONE)
   @Public()
-  public getOne(
-    @Param("id") id: string
-  ) {
+  public getOne(@Param("id") id: string) {
     return this.service.getOne(id);
   }
 
   @ApiOperation({
-    summary: "Creaing a users"
+    summary: "Creaing a users",
   })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: "Created"
+    description: "Created",
   })
   @Post(ROUTES.POST)
-  public post(
-    @Body() data: UsersCreateDto 
-  ) {
+  public post(@Body() data: UsersCreateDto) {
     return this.service.post(data);
   }
 
   @ApiOperation({
-    summary: "Updating a users"
+    summary: "Updating a users",
   })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Updated"
+    description: "Updated",
   })
   @Put(ROUTES.PUT)
-  public put(
-    @Param("id") id: string,
-    @Body() data: UsersUpdateDto 
-  ) {
+  public put(@Param("id") id: string, @Body() data: UsersUpdateDto) {
     return this.service.put(id, data);
   }
 
   @ApiOperation({
-    summary: "Updating a users"
+    summary: "Updating a users",
   })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Updated"
+    description: "Updated",
   })
   @Patch(ROUTES.PUT)
   public patch(
     @Param("id") id: string,
-    @Body() data: UsersUpdateDto 
+    @Body() data: UsersUpdateDto,
   ) {
     return this.service.patch(id, data);
   }
-  
+
   @ApiOperation({
-    summary: "Deleting a users"
+    summary: "Deleting a users",
   })
   @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Deleted"
+    description: "Deleted",
   })
   @Delete(ROUTES.DELETE)
-  public delete(
-    @Param("id") id: string
-  ) {
+  public delete(@Param("id") id: string) {
     return this.service.delete(id);
   }
 }

@@ -22,20 +22,14 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-       "@env": ["./src/services/env.service"],
-       "services/*": ["./src/services/*"],
-       "decorators/*": ["./src/decorators/*"],
-       "guards/*": ["./src/guards/*"],
-       "types": ["./src/types"],
-       "types/*": ["./src/types/*"]
+      "@env": ["./src/services/env.service"],
+      "services/*": ["./src/services/*"],
+      "decorators/*": ["./src/decorators/*"],
+      "guards/*": ["./src/guards/*"],
+      "types": ["./src/types"],
+      "types/*": ["./src/types/*"]
     }
   },
-  "include": [
-    "./**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "bad-fockarch"
-  ]
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules", "dist", "bad-fockarch"]
 }

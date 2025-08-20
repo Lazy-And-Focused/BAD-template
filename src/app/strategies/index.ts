@@ -1,8 +1,8 @@
+import type { Auth } from "types";
+
 import passport = require("passport");
 
 import Authenticator from "./authenticator";
-
-import { Auth } from "types";
 
 export class Strategy {
   protected readonly _passport: passport.PassportStatic = passport;
@@ -13,7 +13,7 @@ export class Strategy {
 
     this._authenticator = new Authenticator(this._passport);
   }
-  
+
   public readonly initialize = () => {
     return this._passport.initialize();
   };
@@ -41,7 +41,7 @@ export class Strategy {
         refresh_token: user.refresh_token,
 
         created_at: user.created_at,
-        type: user.type
+        type: user.type,
       });
     });
 
