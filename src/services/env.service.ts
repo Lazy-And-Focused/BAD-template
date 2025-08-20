@@ -1,5 +1,12 @@
 import { config } from "dotenv";
-config();
+
+if (process.env.NODE_ENV !== "production") {
+  config({
+    path: ".env." + process.env.NODE_ENV
+  });
+} else {
+  config();
+}
 
 import type { AuthTypes } from "types";
 import { AUTH_TYPES } from "types";
