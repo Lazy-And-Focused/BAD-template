@@ -1,5 +1,6 @@
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { NestFactory } from "@nestjs/core";
+import * as Sentry from "@sentry/nestjs";
 
 import { json, urlencoded } from "express";
 
@@ -12,6 +13,11 @@ import { AppModule } from "./app.module";
 import { env } from "services/env.service";
 
 const passport = new Passport();
+
+Sentry.init({
+  dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
+  tracesSampleRate: 1.0,
+});
 
 (async () => {
   // await connect(env.DATABASE_URL);
