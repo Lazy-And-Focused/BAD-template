@@ -1,17 +1,22 @@
-import { join, Path, strings } from "@angular-devkit/core";
+import type { Path } from "@angular-devkit/core";
+
+import type { 
+  Rule,
+  SchematicContext,
+  Source,
+} from "@angular-devkit/schematics"
+
+import { join, strings } from "@angular-devkit/core";
 import {
+  SchematicsException,
   apply,
   chain,
   filter,
   mergeWith,
   move,
   noop,
-  Rule,
-  SchematicContext,
-  SchematicsException,
-  Source,
   template,
-  url,
+  url
 } from "@angular-devkit/schematics";
 
 import { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
@@ -32,7 +37,7 @@ function transform(options: BadFockarchOptions): BadFockarchOptions {
   target.path = normalizeToKebabOrSnakeCase(location.path);
   target.language = target.language !== undefined ? target.language : "ts";
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
-    options.specFileSuffix || "spec",
+    options.specFileSuffix || "test",
   );
 
   target.path = target.flat

@@ -1,4 +1,4 @@
-import { Path } from "@angular-devkit/core";
+import type { Path } from "@angular-devkit/core";
 
 export interface Schema {
   /**
@@ -23,7 +23,7 @@ export interface Schema {
   spec?: boolean;
   /**
    * Specifies the file suffix of spec files.
-   * @default "spec"
+   * @default "test"
    */
   specFileSuffix?: string;
   /**

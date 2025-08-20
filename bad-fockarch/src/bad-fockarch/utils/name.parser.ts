@@ -1,4 +1,5 @@
-import { basename, dirname, normalize, Path } from "@angular-devkit/core";
+import type { Path } from "@angular-devkit/core";
+import { basename, dirname, normalize } from "@angular-devkit/core";
 
 export interface ParseOptions {
   name: string;
