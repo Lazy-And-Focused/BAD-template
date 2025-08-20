@@ -6,6 +6,16 @@ import type {
   Source,
 } from "@angular-devkit/schematics"
 
+import type { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
+
+import type { Location } from "./utils";
+
+import {
+  NameParser,
+  normalizeToKebabOrSnakeCase,
+  mergeSourceRoot
+} from "./utils";
+
 import { join, strings } from "@angular-devkit/core";
 import {
   SchematicsException,
@@ -18,11 +28,6 @@ import {
   template,
   url
 } from "@angular-devkit/schematics";
-
-import { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
-import { Location, NameParser } from "./utils/name.parser";
-import { normalizeToKebabOrSnakeCase } from "./utils/formatting";
-import { mergeSourceRoot } from "./utils/source-root.helper";
 
 function transform(options: BadFockarchOptions): BadFockarchOptions {
   const target: BadFockarchOptions = Object.assign({}, options);
