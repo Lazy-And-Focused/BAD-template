@@ -24,7 +24,7 @@ jobs:
           cp -r test/* release_contents/test
           cp -r ./.env.example release_contents/.env.example
           cp -r ./.gitignore release_contents/.gitignore
-          cp -r ./.prettierrc release_contents/.prettierrc
+          cp -r ./.prettierrc.mjs release_contents/.prettierrc.mjs
           cp -r ./eslint.config.mjs release_contents/eslint.config.mjs
           cp -r ./LICENSE release_contents/LICENSE
           cp -r ./nest-cli.json release_contents/nest-cli.json
