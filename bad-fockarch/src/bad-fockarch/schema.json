@@ -31,6 +31,11 @@
       "description": "Flag to skip the module import.",
       "default": false
     },
+    "plural": {
+      "type": "boolean",
+      "description": "Flag to add \"s\" or not.",
+      "default": false
+    },
     "module": {
       "type": "string",
       "description": "Allows specification of the declaring module."

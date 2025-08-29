@@ -38,7 +38,7 @@ function transform(options: BadFockarchOptions): BadFockarchOptions {
 
   const location: Location = new NameParser().parse(target);
 
-  target.name = normalizeToKebabOrSnakeCase(location.name);
+  target.name = normalizeToKebabOrSnakeCase(location.name + (target.plural === true ? "s" : ""));
   target.path = normalizeToKebabOrSnakeCase(location.path);
   target.language = target.language !== undefined ? target.language : "ts";
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
