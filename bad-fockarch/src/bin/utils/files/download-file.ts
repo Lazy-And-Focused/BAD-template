@@ -9,6 +9,11 @@ const createDir = (path: string): string[] => {
   const dirs: string[] = [];
 
   const create = (filePath: string = path) => {
+    if (!filePath) {
+      dirs.shift();
+      return dirs;
+    };
+
     const path = parse(filePath).dir;
 
     if (existsSync(path)) return dirs;
