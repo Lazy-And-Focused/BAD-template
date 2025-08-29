@@ -18,7 +18,7 @@ export class Service {
 
   public async getOne(id: string): ServiceResponse<<%= classify(name) %>> {
     return {
-      succeesd: true,
+      successed: true,
       data: {},
       error: null
     };
