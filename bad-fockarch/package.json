@@ -7,7 +7,7 @@
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "bin": {
-    "bad": "./src/bin/index.js"
+    "bad": "./src/bin/index.ts"
   },
   "keywords": [
     "schematics"
