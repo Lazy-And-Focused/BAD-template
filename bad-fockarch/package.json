@@ -1,6 +1,6 @@
 {
   "name": "bad-fockarch",
-  "version": "1.0.1a",
+  "version": "1.0.1b",
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
