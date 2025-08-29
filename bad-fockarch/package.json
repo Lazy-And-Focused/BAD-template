@@ -1,13 +1,13 @@
 {
   "name": "bad-fockarch",
-  "version": "1.0.1",
+  "version": "1.0.1a",
   "description": "A blank schematics",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js"
   },
   "bin": {
-    "bad": "./src/bin/index.ts"
+    "bad": "./src/bin/index.js"
   },
   "keywords": [
     "schematics"
