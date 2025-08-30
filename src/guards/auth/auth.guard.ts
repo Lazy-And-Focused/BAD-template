@@ -8,7 +8,7 @@ import Service from "./auth-guard.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly reflector: Reflector) {}
+  public constructor(private readonly reflector: Reflector) {}
 
   public canActivate(
     context: ExecutionContext,
