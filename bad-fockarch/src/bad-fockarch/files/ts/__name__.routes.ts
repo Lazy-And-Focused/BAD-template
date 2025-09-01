@@ -10,6 +10,6 @@ const ROUTES = {
   PATCH: "/:id",
 
   DELETE: "/:id",
-};
+} as const;
 
 export { ROUTE, ROUTES };
