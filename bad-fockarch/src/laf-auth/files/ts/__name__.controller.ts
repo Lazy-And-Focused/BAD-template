@@ -1,122 +1,122 @@
-import type { <%= classify(name) %>CreateDto } from "./dto/<%= name %>-create.dto";
-import type { <%= classify(name) %>UpdateDto } from "./dto/<%= name %>-update.dto";
-
-import { Public } from "decorators/public.decorator";
-import { AuthGuard } from "guards/auth/auth.guard";
+import type { Request, Response } from "express";
 
 import {
   Controller as NestController,
   Injectable,
   Get,
-  Param,
-  Post,
-  Body,
-  Put,
-  Patch,
-  Delete,
-  UseGuards,
-  HttpStatus
+  HttpStatus,
+  HttpException
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
 import { ROUTE, ROUTES } from "./<%= name %>.routes";
-import { Service } from "./<%= name %>.service"
+
+import env from "services/env.service";
+import Hash from "services/hash.service";
+import AuthApi from "services/auth.service";
+
+const toStr = (str: unknown) => JSON.stringify(str, undefined, 4);
 
 @Injectable()
 @NestController(ROUTE)
-@UseGuards(AuthGuard)
 export class Controller {
-  public constructor(
-    private readonly service: Service
-  ) {}
+  @ApiOperation({
+    summary: "Getting all auth methods"
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: "Getted"
+  })
+  @Get()
+  public printMethods() {
+    const { abbreviations, methods } = AuthApi.methods;
+
+    return {
+      message: `Sorry, but you can't auth without method, try next methods:\n${toStr(methods)}\nAnd this abbreviations:\n${toStr(abbreviations)}`,
+      abbreviations,
+      methods
+    };
+  }
 
   @ApiOperation({
-    summary: "Getting an array of <%= name %>"
+    summary: "Authenticating by redirecting to authenticate service"
+  })
+  @ApiResponse({
+    status: HttpStatus.FOUND,
+    description: "Redirecting"
   })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "Getted"
   })
   @Get(ROUTES.GET)
-  @Public()
-  public get() {
-    return this.service.get()
-  }
-
-  @ApiOperation({
-    summary: "Getting a <%= name %> by id"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted"
-  })
-  @Get(ROUTES.GET_ONE)
-  @Public()
-  public getOne(
-    @Param("id") id: string
+  public async auth(
+    @Req() req: Request,
+    @Res() res: Response
   ) {
-    return this.service.getOne(id);
-  }
-
-  @ApiOperation({
-    summary: "Creaing a <%= name %>"
-  })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: "Created"
-  })
-  @Post(ROUTES.POST)
-  public post(
-    @Body() data: <%= classify(name) %>CreateDto 
-  ) {
-    return this.service.post(data);
-  }
-
-  @ApiOperation({
-    summary: "Updating a <%= name %>"
-  })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Updated"
-  })
-  @Put(ROUTES.PUT)
-  public put(
-    @Param("id") id: string,
-    @Body() data: <%= classify(name) %>UpdateDto 
-  ) {
-    return this.service.put(id, data);
-  }
-
-  @ApiOperation({
-    summary: "Updating a <%= name %>"
-  })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Updated"
-  })
-  @Patch(ROUTES.PUT)
-  public patch(
-    @Param("id") id: string,
-    @Body() data: <%= classify(name) %>UpdateDto 
-  ) {
-    return this.service.patch(id, data);
-  }
+    const { method } = req.params;
+    
+    if (method !== "@me") {
+      const redirect = (req.query.callback?.toString() || req.hostname);
+      
+      res.cookie("redirect", redirect);
   
+      return res.redirect(env.AUTH_URL + "/api/auth/" + method + "?callback=" + env.THIS_URL + "/api/auth/" + method + "/callback");
+    };
+
+    if (req.query.code) {
+      try {
+        const data = await (await fetch(env.AUTH_URL + "/api/auth/" + method + "?code=" + req.query.code)).json();
+        
+        return res.send(data);
+      } catch (error) {
+        console.log(error);
+        throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    };
+
+    if (!req.headers.authorization) throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
+    const { successed, id, profile_id, token } = Hash.resolveToken(req.headers.authorization);
+
+    if (!successed) throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
+
+    try {
+      const response = await fetch(env.AUTH_URL + "/api/auth/@me", {
+        headers: {
+          authorization: "Bearer " + JSON.stringify({
+            id, profile_id, token
+          })
+        }
+      });
+
+      const data = await response.json();
+      return res.send(data);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @ApiOperation({
-    summary: "Deleting a <%= name %>"
+    summary: "Authenticate redirect callback"
   })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
   @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Deleted"
+    status: HttpStatus.FOUND,
+    description: "Redirecting"
   })
-  @Delete(ROUTES.DELETE)
-  public delete(
-    @Param("id") id: string
-  ) {
-    return this.service.delete(id);
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: "Redirecting"
+  })
+  @Get(ROUTES.GET_CALLBACK)
+  public callback(@Req() req: Request, @Res() res: Response) {
+    const redirect = (req.cookies["redirect"] || req.hostname);
+    const code = req.query.code;
+
+    if (!code) {
+      return res.sendStatus(400);
+    }
+
+    return res.redirect(redirect + "?code=" + code);
   }
 }

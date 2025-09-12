@@ -17,7 +17,7 @@
       "description": "BAD Architecture route generator",
       "factory": "./laf-auth/laf-auth.factory#main",
       "schema": "./laf-auth/schema.json",
-      "aliases": ["fauth"]
+      "aliases": ["lauf"]
     }
   }
 }
