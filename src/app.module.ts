@@ -28,7 +28,7 @@ import AuthModule from "./routes/auth/auth.module";
   ],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  public configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes("/");
   }
 }
