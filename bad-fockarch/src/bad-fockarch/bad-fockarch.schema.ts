@@ -18,10 +18,6 @@ export interface Schema {
    */
   sourceRoot?: string;
   /**
-   * plural or not (add "s" or not)
-   */
-  plural?: boolean;
-  /**
    * Specifies if a spec file is generated.
    */
   spec?: boolean;

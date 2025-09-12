@@ -8,13 +8,13 @@ import type {
 
 import type { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
 
-import type { Location } from "./utils";
+import type { Location } from "../utils";
 
 import {
   NameParser,
   normalizeToKebabOrSnakeCase,
   mergeSourceRoot
-} from "./utils";
+} from "../utils";
 
 import { join, strings } from "@angular-devkit/core";
 import {
@@ -38,7 +38,7 @@ function transform(options: BadFockarchOptions): BadFockarchOptions {
 
   const location: Location = new NameParser().parse(target);
 
-  target.name = normalizeToKebabOrSnakeCase(location.name + (target.plural === true ? "s" : ""));
+  target.name = normalizeToKebabOrSnakeCase(location.name);
   target.path = normalizeToKebabOrSnakeCase(location.path);
   target.language = target.language !== undefined ? target.language : "ts";
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
