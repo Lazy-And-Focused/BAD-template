@@ -6,6 +6,12 @@
       "factory": "./bad-fockarch/bad-fockarch.factory#main",
       "schema": "./bad-fockarch/schema.json",
       "aliases": ["bad"]
+    },
+    "bad-plural": {
+      "description": "BAD Architecture route generator",
+      "factory": "./bad-plural/bad-fockarch.factory#main",
+      "schema": "./bad-plural/schema.json",
+      "aliases": ["badp"]
     }
   }
 }
