@@ -6,6 +6,18 @@
       "factory": "./bad-fockarch/bad-fockarch.factory#main",
       "schema": "./bad-fockarch/schema.json",
       "aliases": ["bad"]
+    },
+    "bad-plural": {
+      "description": "BAD Architecture route generator",
+      "factory": "./bad-plural/bad-fockarch.factory#main",
+      "schema": "./bad-plural/schema.json",
+      "aliases": ["badp"]
+    },
+    "laf-auth": {
+      "description": "BAD Architecture route generator",
+      "factory": "./laf-auth/laf-auth.factory#main",
+      "schema": "./laf-auth/schema.json",
+      "aliases": ["lauf"]
     }
   }
 }

@@ -28,6 +28,6 @@ jobs:
         run: cd bad-fockarch && npm run build
 
       - name: "Publishing"
-        run: cd bad-fockarch && npm publish --access public --tag latest
+        run: cd bad-fockarch && npm publish --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "BadFockarchSchematics",
+  "$id": "BadPluralFockarchSchematics",
   "title": "BAD Fockarch Options",
   "type": "object",
   "properties": {

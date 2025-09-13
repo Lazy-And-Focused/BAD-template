@@ -6,7 +6,7 @@ import type {
   Source,
 } from "@angular-devkit/schematics"
 
-import type { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
+import type { Schema as BadFockarchOptions } from "./laf-auth.schema";
 
 import type { Location } from "../utils";
 

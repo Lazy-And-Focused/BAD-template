@@ -6,6 +6,10 @@ export interface Schema {
    */
   name: string;
   /**
+   * The plural name of the pipe.
+   */
+  plural: string;
+  /**
    * The path to create the pipe.
    */
   path?: string | Path;
