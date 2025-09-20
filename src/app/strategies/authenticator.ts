@@ -48,6 +48,7 @@ export class Authenticator {
   };
 
   protected verify<Done extends (...data: unknown[]) => void = VerifyCallback>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     type: AuthTypes,
   ) {
     return async (

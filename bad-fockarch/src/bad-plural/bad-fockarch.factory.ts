@@ -29,6 +29,16 @@ import {
   url
 } from "@angular-devkit/schematics";
 
+function pluralize(name: string) {
+  if (name.endsWith('y') && !name.endsWith('ay') && !name.endsWith('ey') && !name.endsWith('iy') && !name.endsWith('oy') && !name.endsWith('uy')) {
+    return name.slice(0, -1) + 'ies';
+  } else if (name.endsWith('s') || name.endsWith('x') || name.endsWith('z') || name.endsWith('ch') || name.endsWith('sh')) {
+    return name + 'es';
+  } else {
+    return name + 's';
+  }
+}
+
 function transform(options: BadFockarchOptions): BadFockarchOptions {
   const target: BadFockarchOptions = Object.assign({}, options);
 
@@ -39,6 +49,7 @@ function transform(options: BadFockarchOptions): BadFockarchOptions {
   const location: Location = new NameParser().parse(target);
 
   target.name = normalizeToKebabOrSnakeCase(location.name);
+  target.plural = normalizeToKebabOrSnakeCase(pluralize(location.name));
   target.path = normalizeToKebabOrSnakeCase(location.path);
   target.language = target.language !== undefined ? target.language : "ts";
   target.specFileSuffix = normalizeToKebabOrSnakeCase(
@@ -47,7 +58,7 @@ function transform(options: BadFockarchOptions): BadFockarchOptions {
 
   target.path = target.flat
     ? target.path
-    : join(target.path as Path, target.name);
+    : join(target.path as Path, target.plural);
   return target;
 }
 

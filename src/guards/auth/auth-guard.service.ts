@@ -7,6 +7,7 @@ import authErrors from "src/errors/guards/auth.errors";
 
 export class Service {
   public static async validateRequest(req: Request) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { successed, id, token, profile_id } = Hash.parse(req);
 
     if (!successed) {
@@ -33,7 +34,7 @@ export class Service {
     }
 
     const profileUser = {};
-    // const profileUser = await users.model.findOne({ id: findedUser.profile_id });
+    // const profileUser = await users.findOne({ id: findedUser.profile_id });
 
     if (!profileUser) {
       console.log(authErrors.PROFILE_NOT_FOUND);

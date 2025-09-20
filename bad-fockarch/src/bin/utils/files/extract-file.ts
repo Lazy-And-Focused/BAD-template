@@ -3,7 +3,6 @@ import zlib from "zlib";
 
 import {
   createReadStream,
-  existsSync,
   mkdirSync,
   rmSync,
   writeFileSync,
@@ -18,10 +17,12 @@ export const extractFile = (path: string): void => {
     const dirPath = parse(path).dir;
     const filePath = join(dirPath, header.name);
 
-    const isHeaderFolderAndExists =
-      header.type === "directory" && existsSync(filePath);
-    if (isHeaderFolderAndExists) {
-      mkdirSync(filePath);
+    const isHeaderFolder =
+      header.type === "directory"
+    if (isHeaderFolder) {
+      try {
+        mkdirSync(filePath);
+      } catch { /* empty */ }
     } else {
       writeFileSync(filePath, "", "utf-8");
     }

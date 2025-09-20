@@ -19,8 +19,8 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 
-import { ROUTE, ROUTES } from "./<%= name %>.routes";
-import { Service } from "./<%= name %>.service"
+import { ROUTE, ROUTES } from "./<%= plural %>.routes";
+import { Service } from "./<%= plural %>.service"
 
 @Injectable()
 @NestController(ROUTE)

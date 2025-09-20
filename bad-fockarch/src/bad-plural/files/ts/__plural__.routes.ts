@@ -1,4 +1,4 @@
-const ROUTE = "<%= name %>";
+const ROUTE = "<%= plural %>";
 
 const ROUTES = {
   GET: "/",
