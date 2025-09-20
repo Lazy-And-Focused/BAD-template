@@ -15,7 +15,7 @@ import { env } from "services/env.service";
 const passport = new Passport();
 
 Sentry.init({
-  dsn: "https://examplePublicKey@o0.ingest.sentry.io/0",
+  dsn: env.SENTRY_URL,
   tracesSampleRate: 1.0,
 });
 
