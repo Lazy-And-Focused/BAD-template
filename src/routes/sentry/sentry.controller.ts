@@ -1,12 +1,21 @@
 import { Controller as NestController, Get, Injectable, HttpException, Query, HttpStatus } from "@nestjs/common";
 
-import { ROUTE, ROUTES } from "./error.routes";
+import { ROUTE, ROUTES } from "./sentry.routes";
+
+import * as Sentry from "@sentry/nestjs";
 
 @Injectable()
 @NestController(ROUTE)
 export class Controller {
   @Get(ROUTES.GET)
   public get() {
+    Sentry.logger.info("Hello", { string: "World" });
+
+    return "Hello, World!";
+  }
+
+  @Get(ROUTES.GET_ERROR)
+  public getError() {
     throw new Error("Test error for sentry");
   }
 

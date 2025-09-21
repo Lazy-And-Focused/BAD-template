@@ -17,6 +17,10 @@ const passport = new Passport();
 Sentry.init({
   dsn: env.SENTRY_URL,
   tracesSampleRate: 1.0,
+  integrations: [
+    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
+  ],
+  enableLogs: true
 });
 
 (async () => {
