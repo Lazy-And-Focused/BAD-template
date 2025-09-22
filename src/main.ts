@@ -1,5 +1,6 @@
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { NestFactory } from "@nestjs/core";
+import { init as initSentry, consoleLoggingIntegration } from "@sentry/nestjs";
 
 import { json, urlencoded } from "express";
 
@@ -12,6 +13,15 @@ import { AppModule } from "./app.module";
 import { env } from "services/env.service";
 
 const passport = new Passport();
+
+initSentry({
+  dsn: env.SENTRY_URL,
+  tracesSampleRate: 1.0,
+  integrations: [
+    consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
+  ],
+  enableLogs: true
+});
 
 (async () => {
   // await connect(env.DATABASE_URL);
