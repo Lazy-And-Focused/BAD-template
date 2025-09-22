@@ -2,14 +2,14 @@ import { Controller as NestController, Get, Injectable, HttpException, Query, Ht
 
 import { ROUTE, ROUTES } from "./sentry.routes";
 
-import * as Sentry from "@sentry/nestjs";
+import { logger } from "@sentry/nestjs";
 
 @Injectable()
 @NestController(ROUTE)
 export class Controller {
   @Get(ROUTES.GET)
   public get() {
-    Sentry.logger.info("Hello", { string: "World" });
+    logger.info("Hello", { string: "World" });
 
     return "Hello, World!";
   }

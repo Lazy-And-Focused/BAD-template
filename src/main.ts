@@ -1,6 +1,6 @@
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { NestFactory } from "@nestjs/core";
-import * as Sentry from "@sentry/nestjs";
+import { init as initSentry, consoleLoggingIntegration } from "@sentry/nestjs";
 
 import { json, urlencoded } from "express";
 
@@ -14,11 +14,11 @@ import { env } from "services/env.service";
 
 const passport = new Passport();
 
-Sentry.init({
+initSentry({
   dsn: env.SENTRY_URL,
   tracesSampleRate: 1.0,
   integrations: [
-    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
+    consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
   ],
   enableLogs: true
 });
