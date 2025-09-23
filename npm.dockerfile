@@ -1,43 +1,36 @@
-# Development stage
-FROM node:20 AS development
+FROM node:20 AS base
 
-WORKDIR /usr/src/app
-
-COPY package*.json ./
-RUN npm ci
-COPY . .
-
-ENV NODE_ENV=development
-
-USER node
+WORKDIR /app
 
 
 
-# Build stage
-FROM node:20 AS build
-
-WORKDIR /usr/src/app
+FROM base AS dependencies
 
 COPY package*.json ./
-COPY --from=development /usr/src/app/node_modules ./node_modules
-COPY . .
+RUN npm i
+COPY . /app
 
+
+
+FROM base AS build
+
+COPY --from=dependencies /app/node_modules /app/node_modules
+COPY . .
 RUN npm run build
-RUN npm ci
 
-ENV NODE_ENV=production
+
+
+FROM base AS production
+
+
+WORKDIR /app
+
+
+COPY --from=build /app/dist /app/dist
+COPY --from=build /app/node_modules /app/node_modules
+COPY ./.env.development /app/
+
+
 
 USER node
-
-
-
-# Production stage
-FROM node:20 AS production
-WORKDIR /usr/src/app
-
-COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build /usr/src/app/dist ./dist
-
-ENV NODE_ENV=production
-
-CMD ["node", "dist/main.js"]
+CMD [ "node", "dist/main.js" ]

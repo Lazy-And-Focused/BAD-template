@@ -22,7 +22,7 @@
     "start": "set NODE_ENV=production&& nest start",
     "start:dev": "set NODE_ENV=development&& nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "docker:build": "docker build -f pnpm.dockerfile -t bad-template .",
+    "docker:build": "docker build -f npm.dockerfile -t bad-template .",
     "docker:run:dev": "docker run -e NODE_ENV=development -p 3000:3000 bad-template",
     "docker:run:prod": "docker run -e NODE_ENV=production -p 3000:3000 bad-template",
     "start:prod": "node dist/main",
