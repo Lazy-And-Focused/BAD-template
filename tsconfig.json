@@ -30,6 +30,12 @@
       "types/*": ["./src/types/*"]
     }
   },
-  "include": ["./**/*.ts"],
-  "exclude": ["node_modules", "dist", "bad-fockarch"]
+  "include": [
+    "./**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "bad-fockarch"
+  ]
 }

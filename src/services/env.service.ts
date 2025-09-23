@@ -41,7 +41,7 @@ const DEFAULT: Record<Partial, string> = {
 
   AUTH_DATA.forEach((data) => {
     AUTH_TYPES.forEach((type) => {
-      if (process.env[type + "_" + data]) return;
+      if (process.env[type.toUpperCase() + "_" + data]) return;
 
       isError = true;
       console.log(
