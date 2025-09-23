@@ -1,5 +1,4 @@
 FROM node:20 AS base
-
 WORKDIR /app
 
 
@@ -21,10 +20,7 @@ RUN npm run build
 
 
 FROM base AS production
-
-
 WORKDIR /app
-
 
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules /app/node_modules

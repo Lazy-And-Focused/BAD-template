@@ -12,6 +12,7 @@ FROM base AS dependencies
 
 COPY pnpm-lock.yaml ./
 RUN pnpm fetch --prod
+
 COPY . /app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
@@ -21,6 +22,7 @@ FROM base AS build
 
 COPY --from=dependencies /app/node_modules /app/node_modules
 COPY . .
+
 RUN pnpm run build
 
 
@@ -31,12 +33,12 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 
 RUN corepack enable
-
 WORKDIR /app
 
 COPY --from=build /app/dist /app/dist
 COPY --from=build /app/node_modules /app/node_modules
 COPY ./.env.development /app/
+
 
 
 USER node
