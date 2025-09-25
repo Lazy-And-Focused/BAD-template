@@ -4,6 +4,7 @@
 /build
 
 pnpm-lock.yaml
+tsconfig.build.tsbuildinfo
 
 # Logs
 logs
