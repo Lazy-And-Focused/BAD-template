@@ -2,7 +2,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: pnpm.dockerfile
+      dockerfile: dockerfile
       
     ports:
       - "3001:3001"
