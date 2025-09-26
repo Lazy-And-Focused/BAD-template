@@ -19,9 +19,9 @@ jobs:
         run: |
           mkdir -p release_contents
           mkdir -p release_contents/src
-          mkdir -p release_contents/test
+          mkdir -p release_contents/src/test
           cp -r src/* release_contents/src
-          cp -r test/* release_contents/test
+          cp -r ./src/test/* release_contents/src/test
           cp -r ./.env.example release_contents/.env.example
           cp -r ./.gitignore release_contents/.gitignore
           cp -r ./.prettierrc.mjs release_contents/.prettierrc.mjs
