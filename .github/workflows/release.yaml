@@ -31,8 +31,8 @@ jobs:
           cp -r ./package.json release_contents/package.json
           cp -r ./README.md release_contents/README.md
           cp -r ./docker-compose.yaml release_contents/docker-compose.yaml
-          cp -r ./npm.dockerfile release_contents/npm.dockerfile
-          cp -r ./pnpm.dockerfile release_contents/pnpm.dockerfile
+          cp -r ./npm--dockerfile release_contents/npm--dockerfile
+          cp -r ./pnpm--dockerfile release_contents/pnpm--dockerfile
           cp -r ./.dockerignore release_contents/.dockerignore
           cp -r ./tsconfig.json release_contents/tsconfig.json
           cp -r ./tsconfig.build.json release_contents/tsconfig.build.json
