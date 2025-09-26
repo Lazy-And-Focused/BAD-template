@@ -8,6 +8,8 @@ import Command from "./command.type";
 import { getDownloadUrl, RELEASE_URL, RELEASE_FILE_NAME } from "../utils";
 
 import { downloadFile, extractFile } from "../utils/files";
+import { AdditionData } from "../utils/addition-data.type";
+import { resolveChooseFilesAndDelete } from "../utils/files/choose-file";
 
 type Props = {
   name: string;
@@ -54,9 +56,16 @@ export class CreateCommand extends Command<Props> {
 
     await this.downloadRelease(url, filePath);
     await this.extractFile(filePath);
+    await this.resolveChooseFilesAndDelete(folderPath, {
+      packageManager
+    });
     await this.downloadPackages(folderPath, packageManager);
 
     return;
+  }
+
+  private resolveChooseFilesAndDelete(dir: string, data: AdditionData) {
+    return resolveChooseFilesAndDelete(dir, data.packageManager);
   }
 
   private async downloadPackages(path: string, packageManager: "npm" | "pnpm"): Promise<boolean|unknown> {
@@ -107,6 +116,8 @@ export class CreateCommand extends Command<Props> {
 
     const release = await response.json();
     const { url } = await fetch(getDownloadUrl(release.tag_name));
+
+    console.log("Найден релиз версии: " + release.tag_name);
 
     return url;
   }
