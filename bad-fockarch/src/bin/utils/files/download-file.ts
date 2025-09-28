@@ -1,7 +1,7 @@
 import https from "https";
 
 import { rm } from "node:fs/promises";
-import { existsSync, createWriteStream, mkdirSync } from "node:fs";
+import { createWriteStream, existsSync, mkdirSync } from "node:fs";
 
 import { parse } from "path";
 
@@ -27,7 +27,7 @@ const createDir = (path: string): string[] => {
 
 export const downloadFile = async (
   url: string,
-  path: string,
+  path: string
 ): Promise<boolean | unknown> => {
   const dirPath = parse(path).dir;
 
