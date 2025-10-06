@@ -2,23 +2,29 @@ import type { NestModule, MiddlewareConsumer } from "@nestjs/common";
 
 import { Module } from "@nestjs/common";
 
-import { APP_FILTER, APP_INTERCEPTOR, RouterModule } from "@nestjs/core";
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, RouterModule } from "@nestjs/core";
 import { CacheModule, CacheInterceptor } from "@nestjs/cache-manager";
 import { SentryGlobalFilter, SentryModule as Sentry } from "@sentry/nestjs/setup";
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { LoggerMiddleware } from "./middleware/logger.middleware";
 
 import AuthModule from "./routes/auth/auth.module";
 import SentryModule from "./routes/sentry/sentry.module";
+import TestModule from "./routes/test/test.module";
 
 @Module({
   imports: [
-    ...[AuthModule, SentryModule].flatMap((module) => [
+    ...[AuthModule, SentryModule, TestModule].flatMap((module) => [
       module,
       RouterModule.register([{ path: "api", module }]),
     ]),
+    ThrottlerModule.forRoot([{
+      ttl: 20_000,
+      limit: 20,
+    }]),
     CacheModule.register({
-      ttl: 5 * 60 * 1000, // 5 minutes
+      ttl: 5 * 60_000,
       isGlobal: true,
     }),
     Sentry.forRoot(),
@@ -31,7 +37,11 @@ import SentryModule from "./routes/sentry/sentry.module";
     {
       provide: APP_FILTER,
       useClass: SentryGlobalFilter,
-    }
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
   ],
 })
 export class AppModule implements NestModule {
