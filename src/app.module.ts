@@ -13,6 +13,8 @@ import AuthModule from "./routes/auth/auth.module";
 import SentryModule from "./routes/sentry/sentry.module";
 import TestModule from "./routes/test/test.module";
 
+import env from "@env";
+
 @Module({
   imports: [
     ...[AuthModule, SentryModule, TestModule].flatMap((module) => [
@@ -20,11 +22,11 @@ import TestModule from "./routes/test/test.module";
       RouterModule.register([{ path: "api", module }]),
     ]),
     ThrottlerModule.forRoot([{
-      ttl: 20_000,
-      limit: 20,
+      ttl: +env.THROLLER_TIME_TO_LIVE_IN_MILLISECONDS,
+      limit: +env.THROLLER_LIMIT,
     }]),
     CacheModule.register({
-      ttl: 5 * 60_000,
+      ttl: +env.CACHE_TIME_TO_LIVE_IN_MILLISECONDS,
       isGlobal: true,
     }),
     Sentry.forRoot(),
