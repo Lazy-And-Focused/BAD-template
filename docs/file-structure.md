@@ -63,6 +63,8 @@
         ├── main.ts
         ├── app/
         │   └── session.app.ts
+        ├── constants/
+        │   └── $CONSTANT_NAME.constant.ts
         ├── database/
         │   │── schemas/
         |   |   └── $SHEMA_NAME.schema.ts
