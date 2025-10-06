@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
-      
+
     ports:
       - "3001:3001"
     environment:

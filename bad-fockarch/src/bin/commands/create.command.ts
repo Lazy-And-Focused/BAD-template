@@ -57,7 +57,7 @@ export class CreateCommand extends Command<Props> {
     await this.downloadRelease(url, filePath);
     await this.extractFile(filePath);
     await this.resolveChooseFilesAndDelete(folderPath, {
-      packageManager
+      packageManager,
     });
     await this.downloadPackages(folderPath, packageManager);
 
@@ -68,16 +68,19 @@ export class CreateCommand extends Command<Props> {
     return resolveChooseFilesAndDelete(dir, data.packageManager);
   }
 
-  private async downloadPackages(path: string, packageManager: "npm" | "pnpm"): Promise<boolean|unknown> {
+  private async downloadPackages(
+    path: string,
+    packageManager: "npm" | "pnpm",
+  ): Promise<boolean | unknown> {
     console.log("Packages downloading...");
 
-    return new Promise<boolean|unknown>((resolve, reject) => {
+    return new Promise<boolean | unknown>((resolve, reject) => {
       exec(
         `cd ${path} && ${packageManager} --save install`,
         (error, stdout, stderr) => {
           console.log("stdout:\n" + stdout);
           console.log("stderr:\n" + stderr);
-  
+
           if (error !== null) {
             console.log("exec error:\n" + error);
             reject(error);
@@ -97,8 +100,11 @@ export class CreateCommand extends Command<Props> {
     });
   }
 
-  private async downloadRelease(url: string, path: string): Promise<boolean|unknown> {
-    return new Promise<boolean|unknown>((resolve, reject) => {
+  private async downloadRelease(
+    url: string,
+    path: string,
+  ): Promise<boolean | unknown> {
+    return new Promise<boolean | unknown>((resolve, reject) => {
       downloadFile(url, path)
         .then(() => {
           setTimeout(() => {

@@ -2,7 +2,7 @@ import { config } from "dotenv";
 
 if (process.env.NODE_ENV !== "production") {
   config({
-    path: ".env." + process.env.NODE_ENV
+    path: ".env." + process.env.NODE_ENV,
   });
 } else {
   config();
@@ -26,7 +26,7 @@ export const ALL = [
   "PORT",
   "CACHE_TIME_TO_LIVE_IN_MILLISECONDS",
   "THROLLER_TIME_TO_LIVE_IN_MILLISECONDS",
-  "THROLLER_LIMIT"
+  "THROLLER_LIMIT",
 ] as const;
 
 const AUTH_DATA = ["CLIENT_ID", "CLIENT_SECRET", "CALLBACK_URL"] as const;
@@ -43,7 +43,7 @@ const DEFAULT: Record<Partial, string> = {
   PORT: "3001",
   CACHE_TIME_TO_LIVE_IN_MILLISECONDS: "300000",
   THROLLER_TIME_TO_LIVE_IN_MILLISECONDS: "20000",
-  THROLLER_LIMIT: "20"
+  THROLLER_LIMIT: "20",
 };
 
 (() => {

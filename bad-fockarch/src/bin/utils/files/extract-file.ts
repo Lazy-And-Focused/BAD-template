@@ -1,12 +1,7 @@
 import tar from "tar-stream";
 import zlib from "zlib";
 
-import {
-  createReadStream,
-  mkdirSync,
-  rmSync,
-  writeFileSync,
-} from "fs";
+import { createReadStream, mkdirSync, rmSync, writeFileSync } from "fs";
 
 import { join, parse } from "path";
 
@@ -17,12 +12,13 @@ export const extractFile = (path: string): void => {
     const dirPath = parse(path).dir;
     const filePath = join(dirPath, header.name);
 
-    const isHeaderFolder =
-      header.type === "directory"
+    const isHeaderFolder = header.type === "directory";
     if (isHeaderFolder) {
       try {
         mkdirSync(filePath);
-      } catch { /* empty */ }
+      } catch {
+        /* empty */
+      }
     } else {
       writeFileSync(filePath, "", "utf-8");
     }

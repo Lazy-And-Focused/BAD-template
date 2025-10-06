@@ -6,18 +6,18 @@ import {
   Injectable,
   Get,
   UseGuards,
-  HttpStatus
+  HttpStatus,
 } from "@nestjs/common";
 
 import {
   ApiOperation,
   ApiResponse,
   ApiTooManyRequestsResponse,
-  ApiUnauthorizedResponse
+  ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 
 import { SkipThrottle } from "@nestjs/throttler";
-import { CacheTTL } from "@nestjs/cache-manager"
+import { CacheTTL } from "@nestjs/cache-manager";
 
 import { ROUTE, ROUTES } from "./test.routes";
 
@@ -28,14 +28,14 @@ export class Controller {
   public constructor() {}
 
   @ApiOperation({
-    summary: "Getting an array of test"
+    summary: "Getting an array of test",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @ApiUnauthorizedResponse({
-    description: "Unauthorized"
+    description: "Unauthorized",
   })
   @Get(ROUTES.GET)
   @Public()
@@ -44,11 +44,11 @@ export class Controller {
   }
 
   @ApiOperation({
-    summary: "Getting an array of test"
+    summary: "Getting an array of test",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @Get(ROUTES.GET_PUBLIC)
   @Public()
@@ -57,14 +57,14 @@ export class Controller {
   }
 
   @ApiOperation({
-    summary: "Getting an array of test"
+    summary: "Getting an array of test",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @ApiTooManyRequestsResponse({
-    description: "Too many requests"
+    description: "Too many requests",
   })
   @Get(ROUTES.GET_TOO_MANY_REQUESTS_NON_PROTECTED)
   @SkipThrottle()

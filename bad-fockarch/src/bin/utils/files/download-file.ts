@@ -12,7 +12,7 @@ const createDir = (path: string): string[] => {
     if (!filePath) {
       dirs.shift();
       return dirs;
-    };
+    }
 
     const path = parse(filePath).dir;
 
@@ -27,7 +27,7 @@ const createDir = (path: string): string[] => {
 
 export const downloadFile = async (
   url: string,
-  path: string
+  path: string,
 ): Promise<boolean | unknown> => {
   const dirPath = parse(path).dir;
 

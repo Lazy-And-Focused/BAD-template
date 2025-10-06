@@ -5,9 +5,13 @@ import {
   Injectable,
   Get,
   HttpStatus,
-  HttpException
+  HttpException,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiUnauthorizedResponse,
+} from "@nestjs/swagger";
 
 import { ROUTE, ROUTES } from "./<%= name %>.routes";
 
@@ -21,11 +25,11 @@ const toStr = (str: unknown) => JSON.stringify(str, undefined, 4);
 @NestController(ROUTE)
 export class Controller {
   @ApiOperation({
-    summary: "Getting all auth methods"
+    summary: "Getting all auth methods",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @Get()
   public printMethods() {
@@ -34,59 +38,77 @@ export class Controller {
     return {
       message: `Sorry, but you can't auth without method, try next methods:\n${toStr(methods)}\nAnd this abbreviations:\n${toStr(abbreviations)}`,
       abbreviations,
-      methods
+      methods,
     };
   }
 
   @ApiOperation({
-    summary: "Authenticating by redirecting to authenticate service"
+    summary: "Authenticating by redirecting to authenticate service",
   })
   @ApiResponse({
     status: HttpStatus.FOUND,
-    description: "Redirecting"
+    description: "Redirecting",
   })
   @ApiResponse({
     status: HttpStatus.OK,
-    description: "Getted"
+    description: "Getted",
   })
   @Get(ROUTES.GET)
-  public async auth(
-    @Req() req: Request,
-    @Res() res: Response
-  ) {
+  public async auth(@Req() req: Request, @Res() res: Response) {
     const { method } = req.params;
-    
+
     if (method !== "@me") {
-      const redirect = (req.query.callback?.toString() || req.hostname);
-      
+      const redirect = req.query.callback?.toString() || req.hostname;
+
       res.cookie("redirect", redirect);
-  
-      return res.redirect(env.AUTH_URL + "/api/auth/" + method + "?callback=" + env.THIS_URL + "/api/auth/" + method + "/callback");
-    };
+
+      return res.redirect(
+        env.AUTH_URL +
+          "/api/auth/" +
+          method +
+          "?callback=" +
+          env.THIS_URL +
+          "/api/auth/" +
+          method +
+          "/callback",
+      );
+    }
 
     if (req.query.code) {
       try {
-        const data = await (await fetch(env.AUTH_URL + "/api/auth/" + method + "?code=" + req.query.code)).json();
-        
+        const data = await (
+          await fetch(
+            env.AUTH_URL + "/api/auth/" + method + "?code=" + req.query.code,
+          )
+        ).json();
+
         return res.send(data);
       } catch (error) {
         console.log(error);
         throw new HttpException(error, HttpStatus.INTERNAL_SERVER_ERROR);
       }
-    };
+    }
 
-    if (!req.headers.authorization) throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
-    const { successed, id, profile_id, token } = Hash.resolveToken(req.headers.authorization);
+    if (!req.headers.authorization)
+      throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
+    const { successed, id, profile_id, token } = Hash.resolveToken(
+      req.headers.authorization,
+    );
 
-    if (!successed) throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
+    if (!successed)
+      throw new HttpException("Access denied", HttpStatus.FORBIDDEN);
 
     try {
       const response = await fetch(env.AUTH_URL + "/api/auth/@me", {
         headers: {
-          authorization: "Bearer " + JSON.stringify({
-            id, profile_id, token
-          })
-        }
+          authorization:
+            "Bearer " +
+            JSON.stringify({
+              id,
+              profile_id,
+              token,
+            }),
+        },
       });
 
       const data = await response.json();
@@ -98,19 +120,19 @@ export class Controller {
   }
 
   @ApiOperation({
-    summary: "Authenticate redirect callback"
+    summary: "Authenticate redirect callback",
   })
   @ApiResponse({
     status: HttpStatus.FOUND,
-    description: "Redirecting"
+    description: "Redirecting",
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: "Redirecting"
+    description: "Redirecting",
   })
   @Get(ROUTES.GET_CALLBACK)
   public callback(@Req() req: Request, @Res() res: Response) {
-    const redirect = (req.cookies["redirect"] || req.hostname);
+    const redirect = req.cookies["redirect"] || req.hostname;
     const code = req.query.code;
 
     if (!code) {

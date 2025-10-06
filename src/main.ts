@@ -20,7 +20,7 @@ initSentry({
   integrations: [
     consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
   ],
-  enableLogs: true
+  enableLogs: true,
 });
 
 (async () => {

@@ -1,10 +1,10 @@
 import type { Path } from "@angular-devkit/core";
 
-import type { 
+import type {
   Rule,
   SchematicContext,
   Source,
-} from "@angular-devkit/schematics"
+} from "@angular-devkit/schematics";
 
 import type { Schema as BadFockarchOptions } from "./laf-auth.schema";
 
@@ -13,7 +13,7 @@ import type { Location } from "../utils";
 import {
   NameParser,
   normalizeToKebabOrSnakeCase,
-  mergeSourceRoot
+  mergeSourceRoot,
 } from "../utils";
 
 import { join, strings } from "@angular-devkit/core";
@@ -26,7 +26,7 @@ import {
   move,
   noop,
   template,
-  url
+  url,
 } from "@angular-devkit/schematics";
 
 function transform(options: BadFockarchOptions): BadFockarchOptions {

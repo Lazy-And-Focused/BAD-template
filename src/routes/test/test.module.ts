@@ -5,6 +5,6 @@ import { Controller } from "./test.controller";
 @Module({
   imports: [],
   controllers: [Controller],
-  providers: []
+  providers: [],
 })
 export default class TestModule {}

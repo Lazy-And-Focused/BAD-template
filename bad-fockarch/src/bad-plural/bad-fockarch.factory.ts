@@ -1,10 +1,10 @@
 import type { Path } from "@angular-devkit/core";
 
-import type { 
+import type {
   Rule,
   SchematicContext,
   Source,
-} from "@angular-devkit/schematics"
+} from "@angular-devkit/schematics";
 
 import type { Schema as BadFockarchOptions } from "./bad-fockarch.schema";
 
@@ -13,7 +13,7 @@ import type { Location } from "../utils";
 import {
   NameParser,
   normalizeToKebabOrSnakeCase,
-  mergeSourceRoot
+  mergeSourceRoot,
 } from "../utils";
 
 import { join, strings } from "@angular-devkit/core";
@@ -26,16 +26,29 @@ import {
   move,
   noop,
   template,
-  url
+  url,
 } from "@angular-devkit/schematics";
 
 function pluralize(name: string) {
-  if (name.endsWith('y') && !name.endsWith('ay') && !name.endsWith('ey') && !name.endsWith('iy') && !name.endsWith('oy') && !name.endsWith('uy')) {
-    return name.slice(0, -1) + 'ies';
-  } else if (name.endsWith('s') || name.endsWith('x') || name.endsWith('z') || name.endsWith('ch') || name.endsWith('sh')) {
-    return name + 'es';
+  if (
+    name.endsWith("y") &&
+    !name.endsWith("ay") &&
+    !name.endsWith("ey") &&
+    !name.endsWith("iy") &&
+    !name.endsWith("oy") &&
+    !name.endsWith("uy")
+  ) {
+    return name.slice(0, -1) + "ies";
+  } else if (
+    name.endsWith("s") ||
+    name.endsWith("x") ||
+    name.endsWith("z") ||
+    name.endsWith("ch") ||
+    name.endsWith("sh")
+  ) {
+    return name + "es";
   } else {
-    return name + 's';
+    return name + "s";
   }
 }
 
