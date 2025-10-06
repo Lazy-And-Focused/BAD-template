@@ -97,7 +97,7 @@ export class Controller {
     status: HttpStatus.OK,
     description: "Updated"
   })
-  @Patch(ROUTES.PUT)
+  @Patch(ROUTES.PATCH)
   public patch(
     @Param("id") id: string,
     @Body() data: <%= classify(name) %>UpdateDto 
