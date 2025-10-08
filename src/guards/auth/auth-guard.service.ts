@@ -11,7 +11,7 @@ export class Service {
     const { successed, id, token, profile_id } = Hash.parse(req);
 
     if (!successed) {
-      console.log(authErrors.HASH_PARSE);
+      console.log(authErrors.hashParseError);
       return false;
     }
 
@@ -19,17 +19,17 @@ export class Service {
     // const findedUser = await auth.findOne({ id: id });
 
     if (!findedUser) {
-      console.log(authErrors.USER_NOT_FOUND);
+      console.log(authErrors.userNotFund);
       return false;
     }
 
     if (findedUser.profile_id !== profile_id) {
-      console.log(authErrors.PROFILE_ID_ERROR);
+      console.log(authErrors.profileIdError);
       return false;
     }
 
     if (token !== new Hash().execute(findedUser.access_token)) {
-      console.log(authErrors.TOKEN_ERROR);
+      console.log(authErrors.tokenError);
       return false;
     }
 
@@ -37,7 +37,7 @@ export class Service {
     // const profileUser = await users.findOne({ id: findedUser.profile_id });
 
     if (!profileUser) {
-      console.log(authErrors.PROFILE_NOT_FOUND);
+      console.log(authErrors.profileNotFound);
       return false;
     }
 
