@@ -4,6 +4,8 @@ import type { Observable } from "rxjs";
 import { Reflector } from "@nestjs/core";
 import { Injectable, CanActivate, ExecutionContext } from "@nestjs/common";
 
+import { logger } from "@sentry/nestjs";
+
 import Service from "./auth-guard.service";
 
 @Injectable()
@@ -22,7 +24,16 @@ export class AuthGuard implements CanActivate {
     }
 
     const request = context.switchToHttp().getRequest<Request>();
-    return Service.validateRequest(request);
+    
+    try {
+      return Service.validateRequest(request)
+    } catch (error) {
+      logger.error(error, {
+        hostname: request.hostname,
+        body: request.body
+      });
+      return false;
+    };
   }
 }
 

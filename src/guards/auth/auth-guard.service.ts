@@ -11,34 +11,29 @@ export class Service {
     const { successed, id, token, profile_id } = Hash.parse(req);
 
     if (!successed) {
-      console.log(authErrors.HASH_PARSE);
-      return false;
+      throw new Error(authErrors.hashParseError);
     }
 
     const findedUser = {} as Auth;
     // const findedUser = await auth.findOne({ id: id });
 
     if (!findedUser) {
-      console.log(authErrors.USER_NOT_FOUND);
-      return false;
+      throw new Error(authErrors.userNotFund);
     }
 
     if (findedUser.profile_id !== profile_id) {
-      console.log(authErrors.PROFILE_ID_ERROR);
-      return false;
+      throw new Error(authErrors.profileIdError);
     }
 
     if (token !== new Hash().execute(findedUser.access_token)) {
-      console.log(authErrors.TOKEN_ERROR);
-      return false;
+      throw new Error(authErrors.tokenError);
     }
 
     const profileUser = {};
     // const profileUser = await users.findOne({ id: findedUser.profile_id });
 
     if (!profileUser) {
-      console.log(authErrors.PROFILE_NOT_FOUND);
-      return false;
+      throw new Error(authErrors.profileNotFound);
     }
 
     console.log("User access granted");
