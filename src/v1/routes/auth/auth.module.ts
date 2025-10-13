@@ -4,6 +4,4 @@ import { AuthController } from "./auth.controller";
 @Module({
   controllers: [AuthController],
 })
-export class AuthModule {}
-
-export default AuthModule;
+export default class AuthModule {}
