@@ -18,7 +18,7 @@ export class Service {
     // const findedUser = await auth.findOne({ id: id });
 
     if (!findedUser) {
-      throw new Error(authErrors.userNotFund);
+      throw new Error(authErrors.userNotFound);
     }
 
     if (findedUser.profile_id !== profile_id) {

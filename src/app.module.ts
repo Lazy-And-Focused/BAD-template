@@ -1,65 +1,27 @@
-import type { NestModule, MiddlewareConsumer } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 
-import { Module } from "@nestjs/common";
+import { RouterModule } from "@nestjs/core";
 
-import {
-  APP_FILTER,
-  APP_GUARD,
-  APP_INTERCEPTOR,
-  RouterModule,
-} from "@nestjs/core";
-import { CacheModule, CacheInterceptor } from "@nestjs/cache-manager";
-import {
-  SentryGlobalFilter,
-  SentryModule as Sentry,
-} from "@sentry/nestjs/setup";
-import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
+import v1Module, { v1Modules } from "./v1/v1.module";
 
-import { LoggerMiddleware } from "./middleware/logger.middleware";
-
-import AuthModule from "./routes/auth/auth.module";
-import SentryModule from "./routes/sentry/sentry.module";
-import TestModule from "./routes/test/test.module";
-
-import env from "@env";
+const modules: Array<[new () => NestModule, (new () => unknown)[]]> = [
+  [v1Module, v1Modules]
+];
 
 @Module({
   imports: [
-    ...[AuthModule, SentryModule, TestModule].flatMap((module) => [
+    ...modules.flatMap(([module, children]) => [
       module,
-      RouterModule.register([{ path: "api", module }]),
+      RouterModule.register([{
+        path: "api",
+        module,
+        children: children.flatMap((child) => [{path: "v1", module: child}])
+      }]),
     ]),
-    ThrottlerModule.forRoot([
-      {
-        ttl: +env.THROLLER_TIME_TO_LIVE_IN_MILLISECONDS,
-        limit: +env.THROLLER_LIMIT,
-      },
-    ]),
-    CacheModule.register({
-      ttl: +env.CACHE_TIME_TO_LIVE_IN_MILLISECONDS,
-      isGlobal: true,
-    }),
-    Sentry.forRoot(),
-  ],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: SentryGlobalFilter,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-  ],
+  ]
 })
-export class AppModule implements NestModule {
+export default class AppModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes("/");
+    consumer.apply().forRoutes("/");
   }
 }
-
-export default AppModule;

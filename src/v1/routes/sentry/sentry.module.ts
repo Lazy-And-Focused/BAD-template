@@ -4,6 +4,4 @@ import { Controller } from "./sentry.controller";
 @Module({
   controllers: [Controller],
 })
-export class SentryModule {}
-
-export default SentryModule;
+export default class SentryModule {}
