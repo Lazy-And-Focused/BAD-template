@@ -1,17 +1,31 @@
 import type { NextFunction, Request, Response } from "express";
 
-import { Controller, Get, Injectable, Next, Req, Res } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Injectable, Next, Req, Res } from "@nestjs/common";
 
 import { ROUTE, ROUTES } from "./auth.routes";
 
 import env from "services/env.service";
 import Hash from "services/hash.service";
 import AuthApi from "services/auth.service";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 @Injectable()
 @Controller(ROUTE)
+@ApiResponse({
+  status: HttpStatus.OK,
+  description: "Ok",
+})
+@ApiResponse({
+  status: HttpStatus.FOUND,
+  description: "Redirecting",
+})
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  description: "Redirecting",
+})
 export class AuthController {
   @Get()
+  @ApiOperation({ summary: "getting all authentication methods" })
   public printMethods() {
     const { abbreviations, methods } = AuthApi.methods;
     const toStr = (str: unknown) => JSON.stringify(str, undefined, 4);
@@ -24,6 +38,7 @@ export class AuthController {
   }
 
   @Get(ROUTES.GET)
+  @ApiOperation({ summary: "redirecting to authentication system" })
   public auth(
     @Req() req: Request,
     @Res() res: Response,
@@ -33,6 +48,7 @@ export class AuthController {
   }
 
   @Get(ROUTES.GET_CALLBACK)
+  @ApiOperation({ summary: "callback from authentication system" })
   public callback(
     @Req() req: Request,
     @Res() res: Response,

@@ -12,8 +12,6 @@ import {
 import {
   ApiOperation,
   ApiResponse,
-  ApiTooManyRequestsResponse,
-  ApiUnauthorizedResponse,
 } from "@nestjs/swagger";
 
 import { SkipThrottle } from "@nestjs/throttler";
@@ -24,18 +22,31 @@ import { ROUTE, ROUTES } from "./test.routes";
 @Injectable()
 @NestController(ROUTE)
 @UseGuards(AuthGuard)
+@ApiResponse({
+  status: HttpStatus.OK,
+  description: "Ok"
+})
+@ApiResponse({
+  status: HttpStatus.FORBIDDEN,
+  description: "Not accesss to route"
+})
+@ApiResponse({
+  status: HttpStatus.TOO_MANY_REQUESTS,
+  description: `A large number of requests`
+})
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: "Does not have an authentication token in headers (`headers.authorization`)"
+})
+@ApiResponse({
+  status: HttpStatus.TOO_MANY_REQUESTS,
+  description: "Too many requests, try later"
+})
 export class Controller {
   public constructor() {}
 
   @ApiOperation({
-    summary: "Getting an array of test",
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted",
-  })
-  @ApiUnauthorizedResponse({
-    description: "Unauthorized",
+    summary: "Protected route",
   })
   @Get(ROUTES.GET)
   @Public()
@@ -44,11 +55,7 @@ export class Controller {
   }
 
   @ApiOperation({
-    summary: "Getting an array of test",
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted",
+    summary: "Public protected route",
   })
   @Get(ROUTES.GET_PUBLIC)
   @Public()
@@ -57,14 +64,7 @@ export class Controller {
   }
 
   @ApiOperation({
-    summary: "Getting an array of test",
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted",
-  })
-  @ApiTooManyRequestsResponse({
-    description: "Too many requests",
+    summary: "Public non protected route",
   })
   @Get(ROUTES.GET_TOO_MANY_REQUESTS_NON_PROTECTED)
   @SkipThrottle()

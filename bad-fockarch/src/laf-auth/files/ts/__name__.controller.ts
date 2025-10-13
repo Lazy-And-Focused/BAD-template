@@ -23,13 +23,21 @@ const toStr = (str: unknown) => JSON.stringify(str, undefined, 4);
 
 @Injectable()
 @NestController(ROUTE)
+@ApiResponse({
+  status: HttpStatus.OK,
+  description: "Ok",
+})
+@ApiResponse({
+  status: HttpStatus.FOUND,
+  description: "Redirecting",
+})
+@ApiResponse({
+  status: HttpStatus.BAD_REQUEST,
+  description: "Redirecting",
+})
 export class Controller {
   @ApiOperation({
     summary: "Getting all auth methods",
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted",
   })
   @Get()
   public printMethods() {
@@ -44,14 +52,6 @@ export class Controller {
 
   @ApiOperation({
     summary: "Authenticating by redirecting to authenticate service",
-  })
-  @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: "Redirecting",
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted",
   })
   @Get(ROUTES.GET)
   public async auth(@Req() req: Request, @Res() res: Response) {
@@ -121,14 +121,6 @@ export class Controller {
 
   @ApiOperation({
     summary: "Authenticate redirect callback",
-  })
-  @ApiResponse({
-    status: HttpStatus.FOUND,
-    description: "Redirecting",
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: "Redirecting",
   })
   @Get(ROUTES.GET_CALLBACK)
   public callback(@Req() req: Request, @Res() res: Response) {
