@@ -9,7 +9,6 @@ import { Controller } from "./test.controller";
 import { ROUTE, ROUTES } from "./test.routes";
 
 import v1Module from "../../v1.module";
-import env from "@env";
 
 const toUrl = (path: string) => (`/v1/${ROUTE}${path}`);
 
