@@ -10,7 +10,7 @@ import { ROUTE, ROUTES } from "./test.routes";
 
 import v1Module from "../../v1.module";
 
-const toUrl = (path: string) => (`/v1/${ROUTE}${path}`);
+const toUrl = (path: string) => `/v1/${ROUTE}${path}`;
 
 describe(ROUTE + " controller", () => {
   let controller: Controller;
@@ -55,12 +55,10 @@ describe(ROUTE + " controller", () => {
         totalHits: 10,
         isBlocked: true,
         timeToBlockExpire: 20000,
-        timeToExpire: 0
+        timeToExpire: 0,
       });
-      
-      return request(app.getHttpServer())
-        .get(toUrl(ROUTES.GET))
-        .expect(429);
+
+      return request(app.getHttpServer()).get(toUrl(ROUTES.GET)).expect(429);
     });
   });
 

@@ -15,9 +15,7 @@
   "rootDir": "../",
   "testEnvironment": "node",
   "testRegex": "\\.test\\.ts$",
-  "collectCoverageFrom": [
-    "src/**/*.(t|j)s"
-  ],
+  "collectCoverageFrom": ["src/**/*.(t|j)s"],
   "modulePathIgnorePatterns": ["<rootDir>/bad-fockarch/"],
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
