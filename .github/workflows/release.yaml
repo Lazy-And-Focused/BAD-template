@@ -42,7 +42,7 @@ jobs:
         run: |
           gh release create "${{ github.ref_name}}" \
             --repo="$GITHUB_REPOSITORY" \
-            --title="${GITHUB_REF_NAME#v}" \
+            --title="${GITHUB_REF_NAME#rv}" \
             --generate-notes \
             release.tar.gz
         env:
