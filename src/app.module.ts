@@ -4,18 +4,26 @@ import { RouterModule } from "@nestjs/core";
 
 import v1Module, { v1Modules } from "./v1/v1.module";
 
-const modules: Array<[new () => NestModule, (new () => unknown)[]]> = [
-  [v1Module, v1Modules]
+const modules: Array<{
+  module: new () => NestModule,
+  children: (new () => unknown)[],
+  path: string
+}> = [
+  {
+    module: v1Module,
+    children: v1Modules,
+    path: "v1"
+  }
 ];
 
 @Module({
   imports: [
-    ...modules.flatMap(([module, children]) => [
+    ...modules.flatMap(({module, children, path}) => [
       module,
       RouterModule.register([{
         path: "api",
         module,
-        children: children.flatMap((child) => [{path: "v1", module: child}])
+        children: children.flatMap((module) => [{path, module}])
       }]),
     ]),
   ]
