@@ -17,7 +17,7 @@ import {
   UseGuards,
   HttpStatus
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 import { ROUTE, ROUTES } from "./<%= plural %>.routes";
 import { Service } from "./<%= plural %>.service"
@@ -25,6 +25,22 @@ import { Service } from "./<%= plural %>.service"
 @Injectable()
 @NestController(ROUTE)
 @UseGuards(AuthGuard)
+@ApiResponse({
+  status: HttpStatus.OK,
+  description: "Ok"
+})
+@ApiResponse({
+  status: HttpStatus.FORBIDDEN,
+  description: "Not accesss to route"
+})
+@ApiResponse({
+  status: HttpStatus.TOO_MANY_REQUESTS,
+  description: `A large number of requests`
+})
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: "Does not have an authentication token in headers (`headers.authorization`)"
+})
 export class Controller {
   public constructor(
     private readonly service: Service
@@ -32,10 +48,6 @@ export class Controller {
 
   @ApiOperation({
     summary: "Getting an array of <%= name %>"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted"
   })
   @Get(ROUTES.GET)
   @Public()
@@ -45,10 +57,6 @@ export class Controller {
 
   @ApiOperation({
     summary: "Getting a <%= name %> by id"
-  })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Getted"
   })
   @Get(ROUTES.GET_ONE)
   @Public()
@@ -61,11 +69,6 @@ export class Controller {
   @ApiOperation({
     summary: "Creaing a <%= name %>"
   })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.CREATED,
-    description: "Created"
-  })
   @Post(ROUTES.POST)
   public post(
     @Body() data: <%= classify(name) %>CreateDto 
@@ -75,11 +78,6 @@ export class Controller {
 
   @ApiOperation({
     summary: "Updating a <%= name %>"
-  })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Updated"
   })
   @Put(ROUTES.PUT)
   public put(
@@ -92,11 +90,6 @@ export class Controller {
   @ApiOperation({
     summary: "Updating a <%= name %>"
   })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Updated"
-  })
   @Patch(ROUTES.PATCH)
   public patch(
     @Param("id") id: string,
@@ -107,11 +100,6 @@ export class Controller {
   
   @ApiOperation({
     summary: "Deleting a <%= name %>"
-  })
-  @ApiUnauthorizedResponse({ description: "Unauthorized" })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "Deleted"
   })
   @Delete(ROUTES.DELETE)
   public delete(
